@@ -12,3 +12,11 @@
 
 ## Images
 <!-- Usually only applicable to UI changes, what did it look like before and what will it look like after? -->
+
+## Accessibility
+<!-- Usually only applicable to UI changes, check the boxes if you are satisfied that your changes pass these tests -->
+
+- [ ] [Tested with screen reader](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/558398)
+- [ ] [Navigable with keyboard](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/39894d)
+- [ ] [Colour contrast passed](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/92b913)
+- [ ] [The change doesn't use only colour to convey meaning](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/29032f)
