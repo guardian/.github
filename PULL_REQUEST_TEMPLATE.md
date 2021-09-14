@@ -16,7 +16,7 @@
 ## Accessibility
 <!-- Usually only applicable to UI changes, check the boxes if you are satisfied that your changes pass these tests -->
 
-- [ ] [Tested with screen reader](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/558398)
-- [ ] [Navigable with keyboard](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/39894d)
-- [ ] [Colour contrast passed](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/92b913)
-- [ ] [The change doesn't use only colour to convey meaning](https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility/t/29032f)
+- [ ] [Tested with screen reader](https://github.com/guardian/source/blob/main/docs/06-accessibility.md#screen-readers)
+- [ ] [Navigable with keyboard](https://github.com/guardian/source/blob/main/docs/06-accessibility.md#keyboard-navigation)
+- [ ] [Colour contrast passed](https://github.com/guardian/source/blob/main/docs/06-accessibility.md#colour-contrast)
+- [ ] [The change doesn't use only colour to convey meaning](https://github.com/guardian/source/blob/main/docs/06-accessibility.md#use-of-colour)
