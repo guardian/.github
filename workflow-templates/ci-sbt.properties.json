@@ -1,0 +1,8 @@
+{
+  "name": "Guardian CI for SBT",
+  "description": "A GitHub Action workflow for CI of SBT projects with permissions to upload to Riff-Raff's S3 bucket",
+  "iconName": "guardian",
+  "categories": [
+    "Scala"
+  ]
+}
