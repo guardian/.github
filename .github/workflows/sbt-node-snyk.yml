@@ -35,6 +35,6 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk monitor
-              run: snyk monitor --all-projects ${INPUT_DEBUG:+ -d}  --org=${{ inputs.ORG }}
+              run: snyk monitor --all-projects ${INPUT_DEBUG:+ -d}  --org="${{ inputs.ORG }}"
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
