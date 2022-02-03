@@ -6,6 +6,9 @@ on:
       DEBUG:
         type: string
         required: false
+      ORG:
+        type: string
+        required: true
       JAVA_VERSION:
         type: string
         required: false
@@ -25,6 +28,10 @@ jobs:
               run: echo INPUT_DEBUG=${{ inputs.DEBUG }} >> $GITHUB_ENV
               shell: bash
 
+            - name: Setup org var
+              run: echo INPUT_ORG=${{ inputs.ORG }} >> $GITHUB_ENV
+              shell: bash
+
             - uses: snyk/actions/setup@0.3.0
             - uses: actions/setup-node@v2
               with:
@@ -36,6 +43,6 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk monitor
-              run: snyk monitor --all-projects ${INPUT_DEBUG:+ -d}
+              run: snyk monitor --all-projects ${INPUT_DEBUG:+ -d}  --org=${INPUT_ORG}
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
