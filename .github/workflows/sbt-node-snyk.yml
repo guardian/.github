@@ -21,8 +21,7 @@ jobs:
               uses: actions/checkout@v2
 
             - name: Setup debug var
-              run: |
-                echo INPUT_DEBUG=${{ inputs.DEBUG }} >> $GITHUB_ENV
+              run: echo INPUT_DEBUG=${{ inputs.DEBUG }} >> $GITHUB_ENV
               shell: bash
 
             - uses: snyk/actions/setup@0.3.0
