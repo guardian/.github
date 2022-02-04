@@ -1,4 +1,4 @@
-name: SBT Node Snyk
+name: Simple Snyk monitor for SBT + Node
 
 on:
   workflow_call:
@@ -6,6 +6,10 @@ on:
       DEBUG:
         type: string
         required: false
+      JAVA_VERSION:
+        type: string
+        required: false
+        default: "11"
     secrets:
       SNYK_TOKEN:
         required: true
@@ -28,7 +32,7 @@ jobs:
 
             - uses: actions/setup-java@v2
               with:
-                  java-version: "11"
+                  java-version: ${{ inputs.JAVA_VERSION }}
                   distribution: "adopt"
 
             - name: Snyk monitor
