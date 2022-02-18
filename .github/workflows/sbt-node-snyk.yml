@@ -13,6 +13,10 @@ on:
         type: string
         required: false
         default: "11"
+      NODE_VERSION_FILE:
+        type: string
+        required: false
+        default: ".nvmrc"
     secrets:
       SNYK_TOKEN:
         required: true
@@ -27,7 +31,7 @@ jobs:
             - uses: snyk/actions/setup@0.3.0
             - uses: actions/setup-node@v2
               with:
-                  node-version-file: '.nvmrc'
+                  node-version-file: ${{ inputs.NODE_VERSION_FILE }}
 
             - uses: actions/setup-java@v2
               with:
