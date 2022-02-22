@@ -16,7 +16,7 @@ jobs:
 
     # See https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token
     permissions:
-      # required by guardian/actions-assume-aws-role
+      # required by aws-actions/configure-aws-credentials
       id-token: write
       contents: read
     steps:
