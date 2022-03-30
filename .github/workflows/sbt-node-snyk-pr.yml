@@ -42,7 +42,7 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk test
-              run: echo _${SEVERITY_THRESHOLD}_${SEVERITY_THRESHOLD:+ -d}_ && echo snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=${SEVERITY_THRESHOLD:+ high} --all-projects --org="${{ inputs.ORG }}"
+              run: echo _${SEVERITY_THRESHOLD}_${SEVERITY_THRESHOLD:- default}_ && echo snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=${SEVERITY_THRESHOLD:-high} --all-projects --org="${{ inputs.ORG }}"
               env:
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
                   SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
