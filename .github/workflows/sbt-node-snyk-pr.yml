@@ -39,7 +39,7 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk test
-              run: echo ${INPUT_DEBUG} ${INPUT_DEBUG:+ -d} && snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=critical --all-projects --org="${{ inputs.ORG }}"
+              run: snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=critical --all-projects --org="${{ inputs.ORG }}"
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
