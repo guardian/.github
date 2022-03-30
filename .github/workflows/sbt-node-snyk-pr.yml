@@ -6,6 +6,9 @@ on:
       DEBUG:
         type: string
         required: false
+      SEVERITY_THRESHOLD:
+        type: string
+        required: false
       ORG:
         type: string
         required: true
@@ -39,7 +42,8 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk test
-              run: snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=critical --all-projects --org="${{ inputs.ORG }}"
+              run: snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=${SEVERITY_THRESHOLD:+ high} --all-projects --org="${{ inputs.ORG }}"
               env:
-                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
+                  SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
+                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
