@@ -8,7 +8,7 @@ on:
         required: false
         default: false
       SKIP_SBT:
-        type:boolean
+        type: boolean
         required: false
         default: false
       DEBUG:
