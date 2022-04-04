@@ -3,6 +3,9 @@ name: Simple Snyk monitor for SBT + Node
 on:
   workflow_call:
     inputs:
+      BUILD:
+        type: string
+        required: false
       DEBUG:
         type: string
         required: false
@@ -29,7 +32,9 @@ jobs:
               uses: actions/checkout@v2
 
             - uses: snyk/actions/setup@0.3.0
+
             - uses: actions/setup-node@v2
+              if: inputs.BUILD != 'sbt'
               with:
                   node-version-file: ${{ inputs.NODE_VERSION_FILE }}
 
