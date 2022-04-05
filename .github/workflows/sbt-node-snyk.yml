@@ -3,6 +3,14 @@ name: Simple Snyk monitor for SBT + Node
 on:
   workflow_call:
     inputs:
+      SKIP_NODE:
+        type: boolean
+        required: false
+        default: false
+      SKIP_SBT:
+        type: boolean
+        required: false
+        default: false
       DEBUG:
         type: string
         required: false
@@ -29,11 +37,14 @@ jobs:
               uses: actions/checkout@v2
 
             - uses: snyk/actions/setup@0.3.0
+
             - uses: actions/setup-node@v2
+              if: inputs.SKIP_NODE != true
               with:
                   node-version-file: ${{ inputs.NODE_VERSION_FILE }}
 
             - uses: actions/setup-java@v2
+              if: inputs.SKIP_SBT != true
               with:
                   java-version: ${{ inputs.JAVA_VERSION }}
                   distribution: "adopt"
