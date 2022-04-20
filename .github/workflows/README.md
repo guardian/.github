@@ -1,9 +1,16 @@
-
 # Snyk
 
 We have two Snyk actions. [sbt-node-snyk](sbt-node-snyk.yml) and [sbt-node-snyk-pr](sbt-node-snyk-pr.yml).
 
 It is recommended you use both on your project for greater coverage.
+
+## Requirements
+
+1. `SNYK_TOKEN` must be available in your repo's 'Actions secrets' under 'Organization secrets' (Go to `/settings/secrets/actions`). If you cannot see this, ask an engineering manager to add it to your repo.
+1. `with: ORG:` be sure to edit this in the `yml` examples below. This will be the org within Snyk
+![image](https://user-images.githubusercontent.com/48949546/112194614-f6985880-8c00-11eb-946f-a88fdae57662.jpg)
+
+A convention we have is to have these files called `.github/workflows/snyk.yml` and `.github/workflows/snyk-pr.yml`.
 
 # [`snyk monitor`](https://docs.snyk.io/snyk-cli/commands/monitor)
 
