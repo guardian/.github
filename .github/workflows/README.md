@@ -112,7 +112,7 @@ See [sbt-node-snyk-pr.yml](sbt-node-snyk-pr.yml)
 ### Basic usage
 
 ```yml
-name: Snyk
+name: Snyk PR
 
 on:
   pull_request:
