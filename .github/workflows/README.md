@@ -43,7 +43,7 @@ jobs:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 ```
 
-`ORG` is required and should be your organisation ID in Snyk. If this organisation doesn't exist, it will be created.
+`ORG` is required and should be your organisation ID in Snyk.
 
 This will scan both SBT and Node vulnerabilities.
 
