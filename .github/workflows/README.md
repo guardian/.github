@@ -130,6 +130,6 @@ jobs:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 ```
 
-`ORG` is required and should be your organisation name in Snyk. If this organisation doesn't exist, it will be created.
+`ORG` is required and should be your organisation ID in Snyk.
 
 More options can be found in [the inputs of the action](sbt-node-snyk-pr.yml#L5).
