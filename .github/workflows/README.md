@@ -73,7 +73,7 @@ jobs:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 ```
 
-#### Skip SBT
+#### Skip SBT
 
 ```yml
 name: Snyk
