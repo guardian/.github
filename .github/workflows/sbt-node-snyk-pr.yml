@@ -20,6 +20,9 @@ on:
         type: string
         required: false
         default: ".nvmrc"
+      EXCLUDE:
+        type: string
+        required: false
     secrets:
       SNYK_TOKEN:
         required: true
@@ -42,7 +45,7 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk test
-              run: snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=${SEVERITY_THRESHOLD:-high} --all-projects --org="${{ inputs.ORG }}"
+              run: snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=${SEVERITY_THRESHOLD:-high} ${INPUT_EXCLUDE:+ ${INPUT_EXCLUDE}} --all-projects --org="${{ inputs.ORG }}"
               env:
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
                   SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}

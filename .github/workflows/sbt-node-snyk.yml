@@ -25,6 +25,9 @@ on:
         type: string
         required: false
         default: ".nvmrc"
+      EXCLUDE:
+        type: string
+        required: false
     secrets:
       SNYK_TOKEN:
         required: true
@@ -50,7 +53,7 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk monitor
-              run: snyk monitor ${INPUT_DEBUG:+ -d} --all-projects --org="${{ inputs.ORG }}"
+              run: snyk monitor ${INPUT_DEBUG:+ -d} ${INPUT_EXCLUDE:+ ${INPUT_EXCLUDE}} --all-projects --org="${{ inputs.ORG }}"
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
