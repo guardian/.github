@@ -96,6 +96,41 @@ jobs:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 ```
 
+#### Exclude files/directories
+
+This option is a comma separated list of filenames and directory names for snyk
+to ignore from its scan. It can used to get snyk to ignore certain manifests.
+
+The behaviour is very counter-intuitive. It does not support full file paths,
+only filenames and single directory names. It will ignore any matches it finds
+in the file tree, which is to say, it will ignore any directories or any files that
+match those names.
+
+See the [documentation](https://docs.snyk.io/snyk-cli/commands/monitor#exclude-less-than-name-greater-than-less-than-name-greater-than-...greater-than)
+for more information. 
+
+```yml
+name: Snyk
+# ...
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  security:
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    with:
+      ORG: ~
+      EXCLUDE: file1,file2,dir1,dir
+    secrets:
+       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+```
+
 More options can be found in [the inputs of the action](sbt-node-snyk.yml#L5).
 
 # [`snyk test`](https://docs.snyk.io/snyk-cli/commands/test)
