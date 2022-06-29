@@ -14,7 +14,7 @@ A convention we have is to have these files called `.github/workflows/snyk.yml` 
 
 # [`snyk monitor`](https://docs.snyk.io/snyk-cli/commands/monitor)
 
-This action creates a project in your Snyk account to monitor open source SBT and Node vulnerabilities and license issues on a cron job.
+This action creates a project in your Snyk account to monitor open source SBT and Node vulnerabilities and license issues.
 
 ## Usage
 
@@ -26,8 +26,6 @@ See [sbt-node-snyk.yml](sbt-node-snyk.yml)
 name: Snyk
 
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches:
       - main
@@ -55,8 +53,6 @@ This will scan both SBT and Node vulnerabilities.
 name: Snyk
 # ...
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches:
       - main
@@ -78,8 +74,6 @@ jobs:
 name: Snyk
 # ...
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches:
       - main
@@ -113,8 +107,6 @@ for more information.
 name: Snyk
 # ...
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches:
       - main
