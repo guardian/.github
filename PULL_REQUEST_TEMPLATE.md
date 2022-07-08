@@ -22,7 +22,7 @@
 
 <!-- Usually only applicable to UI changes, check the boxes if you are satisfied that your changes pass these tests -->
 
-- [ ] [Tested with screen reader](https://guardian.github.io/source/?path=/docs/docs-06-accessibility--page#screen-readers)
-- [ ] [Navigable with keyboard](https://guardian.github.io/source/?path=/docs/docs-06-accessibility--page#keyboard-navigation)
-- [ ] [Colour contrast passed](https://guardian.github.io/source/?path=/docs/docs-06-accessibility--page#colour-contrast)
-- [ ] [The change doesn't use only colour to convey meaning](https://guardian.github.io/source/?path=/docs/docs-06-accessibility--page#use-of-colour)
+-   [ ] [Tested with screen reader](https://github.com/guardian/accessibility/blob/main/people-and-technology/03-visual.md#screen-reader)
+-   [ ] [Navigable with keyboard](https://github.com/guardian/accessibility/blob/main/people-and-technology/02-physical.md#keyboard)
+-   [ ] [Colour contrast passed](https://github.com/guardian/accessibility/blob/main/people-and-technology/03-visual.md#contrast)
+-   [ ] [The change doesn't use only colour to convey meaning](https://github.com/guardian/accessibility/blob/main/people-and-technology/03-visual.md#use-of-colour)
