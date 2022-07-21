@@ -1,0 +1,38 @@
+name: Create PR from tracking branch to default
+
+on:
+    workflow_call:
+        inputs:
+            BRANCH:
+                type: string
+                required: false
+                default: dependency-updates
+            DEFAULT_BRANCH:
+                type: string
+                required: false
+                default: main
+            PR_TITLE_PREFIX:
+                type: string
+                required: false
+                default: "Dependency updates"
+
+jobs:
+    create-tracking-branch-pr:
+        runs-on: ubuntu-latest
+        name: Create PR from tracking branch to default
+        steps:
+            - name: Create Pull Request
+              run: |
+                  tracking=$(gh api /repos/$GITHUB_REPOSITORY/commits/refs/heads/${{ inputs.BRANCH }} -q '.sha')
+                  default=$(gh api /repos/$GITHUB_REPOSITORY/commits/refs/heads/${{ inputs.DEFAULT_BRANCH }} -q '.sha')
+                  
+                  if [[ $tracking != $default ]]; then
+                      gh api /repos/$GITHUB_REPOSITORY/pulls \
+                        -f title="${{ inputs.PR_TITLE_PREFIX }} $(date +%Y-%m-%d)" \
+                        -f base=${{ inputs.DEFAULT_BRANCH }} \
+                        -f head=${{ inputs.BRANCH }}
+                  else
+                      echo "There are no updates"
+                  fi
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}

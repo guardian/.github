@@ -1,0 +1,40 @@
+name: Set up branch to track default branch (useful for automation of dependency updates)
+
+on:
+    workflow_call:
+        inputs:
+            BRANCH:
+                type: string
+                required: false
+                default: "dependency-updates"
+            DEFAULT_BRANCH:
+                type: string
+                required: false
+                default: "main"
+
+jobs:
+    default-tracking-branch:
+        runs-on: ubuntu-latest
+        name: Create branch or rebase it to latest default
+        steps:
+            - name: Create branch (if it does not exists)
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              run: |
+                  gh api --silent \
+                      /repos/${{ github.repository }}/git/refs \
+                      -f ref="refs/heads/${{ inputs.BRANCH }}" \
+                      -f sha="${{ github.sha}}" ||
+                      echo '`${{ inputs.BRANCH }}` branch already exists on ${{ github.repository }}'
+            - name: Checkout tracking branch
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ inputs.BRANCH }}
+                  fetch-depth: 0
+
+            - name: Rebase tracking branch to latest origin default
+              run: |
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  git config user.name "github-actions[bot]"
+                  git rebase origin/${{ inputs.DEFAULT_BRANCH }}
+                  git push -f -u origin ${{ inputs.BRANCH }}

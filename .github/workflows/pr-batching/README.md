@@ -1,0 +1,64 @@
+## Pull Request Batching (dependency updates)
+
+There are a number of tools that automate part of the process of keeping your dependencies from various ecosystems up to date. 
+Naturally they all have different features, but one that is (currently) missing from both Dependabot and Scala Steward
+(which are both popular) is the ability to combine multiple updates into a single PR.
+
+Combining PRs in this way may not be the right choice for every project. If you wish to have granular updates, each running
+their own CI, you may wish to keep the default behaviour. At the other end of the risk and automation spectrum, you may
+be confident enough to automatically merge PRs straight to main without further review. The workflows here are 
+intended for the middle ground where it is desirable for a team member to periodically review a batch of dependency updates
+and review/test/merge as appropriate. This saves time vs. the default of Dependabot/Scala Steward, and is lower risk than full automation.
+
+### Workflow
+
+The workflow(s) to enable this automation borrows heavily from this [blogpost](https://alejandrohdezma.com/blog/updating-multiple-repositories-with-scala-steward-and-github-actions).
+To summarise:
+1. A [workflow](./tracking-branch.yml) is set up to create and update a branch that tracks your default branch 
+2. Your dependency update tool (e.g. Scala Steward) sends regular PRs to your repo, **targeting the branch from 1.**
+3. Another [workflow](./set-automerge.yml) is set up to automerge these PRs
+4. Finally this [workflow](./pr-tracking-branch-to-default.yml) creates a PR on a configurable schedule from the tracking branch. This PR is for manual review by the team
+
+### How to enable
+
+1. Create a workflow in your repository that uses the `tracking-branch` workflow to maintain a dependency update branch:
+```yaml
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-dependency-update-branch:
+    name: Keep tracking branch up to date with main
+    uses: guardian/.github/.github/workflows/pr-batching/tracking-branch.yml@main
+```
+2. Set up your dependency update tooling (e.g. [Scala Steward](https://github.com/guardian/scala-steward-public-repos)) to target this branch. By default it's called `dependency-updates`
+3. (Optionally) Disable your CI from running builds on branches created by your dependency update tool. This saves time and resources, but makes it less obvious which update caused a failure if there is one.
+4. Enable auto-merge on your repository (under General settings):
+![auto-merge-setting.png](auto-merge-setting.png)
+5. Create a workflow in your repository that uses the `set-automerge` workflow to merge dependency update PRs to the tracking branch when all checks have completed
+```yaml
+on:
+  pull_request:
+    branches:
+      - dependency-updates
+
+jobs:
+  set-automerge:
+    name: Set automerge on opened PRs targeting the tracking branch
+    uses: guardian/.github/.github/workflows/pr-batching/set-automerge.yml@main
+```
+6. Finally, create a workflow in your repository that uses the `pr-tracking-branch-to-default` workflow to periodically create a batch-update PR targeting your default branch:
+```yaml
+on:
+  schedule:
+    - cron: "35 10 * * MON"
+  # Provide support for manually triggering the workflow via GitHub.
+  workflow_dispatch:
+
+jobs:
+  pr-tracking-branch:
+    name: Open a PR from dependency-updates targeting main
+    uses: guardian/.github/.github/workflows/pr-batching/pr-tracking-branch-to-default.yml@main
+```
