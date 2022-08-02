@@ -31,10 +31,10 @@ on:
 jobs:
   update-dependency-update-branch:
     name: Keep tracking branch up to date with main
-    uses: guardian/.github/.github/workflows/pr-batching_tracking-branch.yml@main
+    uses: guardian/.github/.github/workflows/pr-batching_tracking-branch.yml@v1
 ```
 2. Set up your dependency update tooling (e.g. [Scala Steward](https://github.com/guardian/scala-steward-public-repos)) to target this branch. By default it's called `dependency-updates`
-3. (Optionally) Disable your CI from running builds on branches created by your dependency update tool. This saves time and resources, but makes it less obvious which update caused a failure if there is one.
+3. (Optional, but advised) Disable your CI from running builds on branches created by your dependency update tool. This saves time and resources, but makes it less obvious which update caused a failure if there is one.
 4. Enable auto-merge on your repository (under General settings):
 ![auto-merge-setting.png](auto-merge-setting.png)
 5. Create a workflow in your repository that uses the `set-automerge` workflow to merge dependency update PRs to the tracking branch when all checks have completed
@@ -47,7 +47,7 @@ on:
 jobs:
   set-automerge:
     name: Set automerge on opened PRs targeting the tracking branch
-    uses: guardian/.github/.github/workflows/pr-batching_set-automerge.yml@main
+    uses: guardian/.github/.github/workflows/pr-batching_set-automerge.yml@v1
 ```
 6. Finally, create a workflow in your repository that uses the `pr-tracking-branch-to-default` workflow to periodically create a batch-update PR targeting your default branch:
 ```yaml
@@ -60,5 +60,5 @@ on:
 jobs:
   pr-tracking-branch:
     name: Open a PR from dependency-updates targeting main
-    uses: guardian/.github/.github/workflows/pr-batching_pr-tracking-branch-to-default.yml@main
+    uses: guardian/.github/.github/workflows/pr-batching_pr-tracking-branch-to-default.yml@v1
 ```
