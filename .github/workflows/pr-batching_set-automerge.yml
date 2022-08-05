@@ -13,4 +13,4 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               run: |
-                  gh pr merge ${{ github.event.number }} --auto -d -r
+                  gh pr merge ${{ github.event.number }} --auto -d -r || gh pr merge ${{ github.event.number }} --auto -d -s
