@@ -54,7 +54,7 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk monitor
-              run: snyk monitor ${INPUT_DEBUG:+ -d} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA}
+              run: snyk monitor ${INPUT_DEBUG:+ -d} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --target-reference=${GITHUB_SHA}
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
