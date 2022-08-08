@@ -29,7 +29,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -77,7 +76,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
   workflow_dispatch:
 
 jobs:
