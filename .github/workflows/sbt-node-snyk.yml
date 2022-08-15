@@ -58,14 +58,14 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk monitor
-              if: inputs.FILE == ""
+              if: inputs.FILE == ''
               run: snyk monitor ${INPUT_DEBUG:+ -d} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA}
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
 
             - name: Snyk monitor
-              if: inputs.FILE != ""
+              if: inputs.FILE != ''
               run: snyk monitor ${INPUT_DEBUG:+ -d} --file="${{ inputs.FILE }}" --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA}
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
