@@ -4,7 +4,7 @@ There are a number of tools that automate part of the process of keeping your de
 Naturally they all have different features, but one that is currently missing from both Dependabot and Scala Steward
 (which are both popular) is the ability to combine multiple updates into a single PR.
 
-Combining PRs in this way may not be the right choice for every project. If you wish to have granular updates, each running
+*Combining PRs in this way may not be the right choice for every project*. If you wish to have granular updates, each running
 their own CI, you may wish to keep the default behaviour. At the other end of the risk and automation spectrum, you may
 be confident enough to automatically merge PRs straight to main without further review. The workflows here are 
 intended for the middle ground where it is desirable for a team member to periodically review a batch of dependency updates
@@ -20,7 +20,7 @@ To summarise:
 4. Finally this [workflow](../pr-batching_pr-tracking-branch-to-default.yml) creates a PR on a configurable schedule from the tracking branch. This PR is for manual review by the team
 
 ### How to enable
-
+**(N.B. there is a script `scripts/pr-batching.sh` to help automate the creation of these workflows. It is designed to work with [nori](https://github.com/Financial-Times/nori) or similar tools to work with multiple repositories at once.)**
 1. Create a workflow in your repository that uses the `tracking-branch` workflow to maintain a dependency update branch:
 ```yaml
 on:
@@ -47,7 +47,9 @@ on:
 jobs:
   set-automerge:
     name: Set automerge on opened PRs targeting the tracking branch
-    uses: guardian/.github/.github/workflows/pr-batching_set-automerge.yml@v1
+    permissions:
+      contents: write
+    uses: guardian/.github/.github/workflows/pr-batching_set-automerge.yml@v1.0.2
 ```
 6. Finally, create a workflow in your repository that uses the `pr-tracking-branch-to-default` workflow to periodically create a batch-update PR targeting your default branch:
 ```yaml
@@ -60,5 +62,9 @@ on:
 jobs:
   pr-tracking-branch:
     name: Open a PR from dependency-updates targeting main
-    uses: guardian/.github/.github/workflows/pr-batching_pr-tracking-branch-to-default.yml@v1
+    uses: guardian/.github/.github/workflows/pr-batching_pr-tracking-branch-to-default.yml@v1.0.2
 ```
+
+### Improvements
+1. Find an alternative to rebasing the dependency branch onto default, that allows (optional) required checks on the dependency branch (for CI.) Perhaps delete and recreate?
+2. Find a way to automatically trigger the actions for the PRs we create targeting default branch. At the moment these are not triggered because actions[bot] is used and they don't trigger workflow runs from that bot to avoid circular workflows.
