@@ -32,6 +32,9 @@ on:
         type: string
         required: false
         default: ".nvmrc"
+      NODE_VERSION_OVERRIDE:
+        type: string
+        required: false
       PRUNE_DUPLICATES:
         type: boolean
         required: false
@@ -49,9 +52,14 @@ jobs:
 
             - uses: snyk/actions/setup@0.3.0
             - uses: actions/setup-node@v2
-              if: inputs.SKIP_NODE != true
+              if: inputs.NODE_VERSION_OVERRIDE == '' && inputs.SKIP_NODE != true
               with:
                   node-version-file: ${{ inputs.NODE_VERSION_FILE }}
+
+            - uses: actions/setup-node@v2
+              if: inputs.NODE_VERSION_OVERRIDE != '' && inputs.SKIP_NODE != true
+              with:
+                  node-version: ${{ inputs.NODE_VERSION_OVERRIDE }}
 
             - uses: actions/setup-java@v2
               if: inputs.SKIP_SBT != true
