@@ -29,6 +29,10 @@ on:
         type: string
         required: false
         default: ".nvmrc"
+      PRUNE_DUPLICATES:
+        type: boolean
+        required: false
+        default: false
     secrets:
       SNYK_TOKEN:
         required: true
@@ -54,7 +58,8 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk monitor
-              run: snyk monitor ${INPUT_DEBUG:+ -d} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA}
+              run: snyk monitor ${INPUT_DEBUG:+ -d} ${PRUNE_DUPLICATES:+ -p} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA} --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
+                  PRUNE_DUPLICATES: ${{ inputs.PRUNE_DUPLICATES }}

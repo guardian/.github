@@ -32,6 +32,10 @@ on:
         type: string
         required: false
         default: ".nvmrc"
+      PRUNE_DUPLICATES:
+        type: boolean
+        required: false
+        default: false
     secrets:
       SNYK_TOKEN:
         required: true
@@ -56,8 +60,9 @@ jobs:
                   distribution: "adopt"
 
             - name: Snyk test
-              run: snyk test ${INPUT_DEBUG:+ -d} --severity-threshold=${SEVERITY_THRESHOLD:-high} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}"
+              run: snyk test ${INPUT_DEBUG:+ -d} ${PRUNE_DUPLICATES:+ -p} --severity-threshold=${SEVERITY_THRESHOLD:-high} --all-projects --org="${{ inputs.ORG }}"  --exclude="${{ inputs.EXCLUDE }}"
               env:
                   INPUT_DEBUG: ${{ inputs.DEBUG }}
                   SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                  PRUNE_DUPLICATES: ${{ secrets.PRUNE_DUPLICATES }}
