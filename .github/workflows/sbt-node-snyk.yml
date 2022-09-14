@@ -1,4 +1,4 @@
-name: Simple Snyk monitor for SBT + Node
+name: Simple Snyk monitor for SBT + Node + Python
 
 on:
   workflow_call:
@@ -11,6 +11,10 @@ on:
         type: boolean
         required: false
         default: false
+      SKIP_PYTHON:
+        type: boolean
+        required: false
+        default: true
       DEBUG:
         type: string
         required: false
@@ -36,6 +40,17 @@ on:
         type: boolean
         required: false
         default: false
+      PYTHON_VERSION:
+        type: string
+        required: false
+      PIP_REQUIREMENTS_FILES:
+        type: string
+        required: false
+        description: space-separated list of requirements.txt file paths to install
+      PIPFILES:
+        type: string
+        required: false
+        description: space-separated list of Pipfile file paths to install
     secrets:
       SNYK_TOKEN:
         required: true
@@ -64,6 +79,29 @@ jobs:
               with:
                   java-version: ${{ inputs.JAVA_VERSION }}
                   distribution: "adopt"
+
+            - uses: actions/setup-python@v4
+              if: inputs.SKIP_PYTHON != true
+              with:
+                python-version: ${{ inputs.PYTHON_VERSION }}
+
+            - if: inputs.SKIP_PYTHON != true
+              run: pip install pipenv
+
+            - if: inputs.PIP_REQUIREMENTS_FILES != ''
+              run: |
+               for file in ${{ inputs.PIP_REQUIREMENTS_FILES }}   
+               do
+                 pip install -r $file
+               done
+
+            - if: inputs.PIPFILES != ''
+              run: |
+                for file in ${{ inputs.PIPFILES }}   
+                do
+                  PIPENV_PIPFILE=$file
+                  pipenv install
+                done 
 
             - name: Snyk monitor
               run: snyk monitor ${INPUT_DEBUG:+ -d} ${PRUNE_DUPLICATES:+ -p} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA} --
