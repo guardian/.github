@@ -15,6 +15,10 @@ on:
         type: boolean
         required: false
         default: true
+      SKIP_GO:
+        type: boolean
+        required: false
+        default: true
       DEBUG:
         type: string
         required: false
@@ -54,6 +58,10 @@ on:
         type: string
         required: false
         description: space-separated list of Pipfile file paths to install
+      GO_VERSION_FILE:
+        type: string
+        required: false
+        default: go.mod
     secrets:
       SNYK_TOKEN:
         required: true
@@ -106,6 +114,10 @@ jobs:
                     pipenv install
                   done 
 
+            - uses: actions/setup-go@v3
+              if: inputs.SKIP_GO != true
+              with:
+                  go-version-file: ${{ inputs.GO_VERSION_FILE }}
 
             - name: Snyk test
               run: snyk test ${INPUT_DEBUG:+ -d} ${PRUNE_DUPLICATES:+ -p} --severity-threshold=${SEVERITY_THRESHOLD:-high} --all-projects --org="${{ inputs.ORG }}"  --exclude="${{ inputs.EXCLUDE }}"
