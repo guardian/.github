@@ -119,11 +119,13 @@ jobs:
             - name: Snyk monitor
               run: |
                 snyk monitor \
-                  $([[ ${{ inputs.DEBUG }} = true ]] && echo -d) \
-                  $([[ ${{ inputs.PRUNE_DUPLICATES }} = true ]] && echo -p) \
+                  ${DEBUG_OPTION} \
+                  ${PRUNE_OPTION} \
                   --all-projects \
-                  --org="${{ inputs.ORG }}" \ 
-                  --exclude="${{ inputs.EXCLUDE }}" \ 
+                  --org="${{ inputs.ORG }}" \
+                  --exclude="${{ inputs.EXCLUDE }}" \
                   --project-tags=commit=${GITHUB_SHA} --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                  DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
+                  PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}

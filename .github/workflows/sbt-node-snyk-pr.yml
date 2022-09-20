@@ -122,12 +122,14 @@ jobs:
             - name: Snyk test
               run: |
                 snyk test \
-                  $([[ ${{ inputs.DEBUG }} = true ]] && echo -d) \ 
-                  $([[ ${{ inputs.PRUNE_DUPLICATES }} = true ]] && echo -p) \
-                  --severity-threshold=${SEVERITY_THRESHOLD:-high} \ 
-                  --all-projects \ 
-                  --org="${{ inputs.ORG }}" \  
+                  $DEBUG_OPTION \
+                  $PRUNE_OPTION \
+                  --severity-threshold=${SEVERITY_THRESHOLD:-high} \
+                  --all-projects \
+                  --org="${{ inputs.ORG }}" \
                   --exclude="${{ inputs.EXCLUDE }}"
               env:
                   SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                  DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
+                  PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
