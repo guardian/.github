@@ -117,8 +117,13 @@ jobs:
                   go-version-file: ${{ inputs.GO_VERSION_FILE }}
 
             - name: Snyk monitor
-              run: snyk monitor ${INPUT_DEBUG:+ -d} ${PRUNE_DUPLICATES:+ -p} --all-projects --org="${{ inputs.ORG }}" --exclude="${{ inputs.EXCLUDE }}" --project-tags=commit=${GITHUB_SHA} --
+              run: |
+                snyk monitor \
+                  $([[ ${{ inputs.DEBUG }} = true ]] && echo -d) \
+                  $([[ ${{ inputs.PRUNE_DUPLICATES }} = true ]] && echo -p) \
+                  --all-projects \
+                  --org="${{ inputs.ORG }}" \ 
+                  --exclude="${{ inputs.EXCLUDE }}" \ 
+                  --project-tags=commit=${GITHUB_SHA} --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-                  INPUT_DEBUG: ${{ inputs.DEBUG }}
-                  PRUNE_DUPLICATES: ${{ inputs.PRUNE_DUPLICATES }}
