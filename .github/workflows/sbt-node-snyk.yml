@@ -40,6 +40,10 @@ on:
       NODE_VERSION_OVERRIDE:
         type: string
         required: false
+      NODE_PACKAGE_JSON_FILES_MISSING_LOCK:
+        type: string
+        required: false
+        description: space separated list of package.json files that are missing lock files; require installation
       PRUNE_DUPLICATES:
         type: boolean
         required: false
@@ -81,6 +85,15 @@ jobs:
               if: inputs.NODE_VERSION_OVERRIDE != '' && inputs.SKIP_NODE != true
               with:
                   node-version: ${{ inputs.NODE_VERSION_OVERRIDE }}
+
+            - if: inputs.NODE_PACKAGE_JSON_FILES_MISSING_LOCK != ''
+              run: |
+                for file in ${{ inputs.NODE_PACKAGE_JSON_FILES_MISSING_LOCK }}   
+                do
+                  cd $(echo $file | sed "s/package\.json//")
+                  npm install
+                  cd -
+                done
 
             - uses: actions/setup-java@v2
               if: inputs.SKIP_SBT != true
