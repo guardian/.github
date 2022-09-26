@@ -63,13 +63,17 @@ on:
         type: string
         required: false
         default: go.mod
+      LARGE_RUNNER:
+        type: boolean
+        required: false
+        default: false
     secrets:
       SNYK_TOKEN:
         required: true
 
 jobs:
     security:
-        runs-on: ubuntu-latest
+        runs-on: ${{ inputs.LARGE_RUNNER == true && 'Ubuntu-20.04-4core-16GB' || 'ubuntu-latest' }}
         steps:
             - name: Checkout branch
               uses: actions/checkout@v2
