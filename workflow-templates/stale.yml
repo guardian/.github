@@ -4,6 +4,8 @@ name: "Stale PR Handler"
 
 on:
   schedule:
+    # Check for Stale PRs every Monday to Thursday morning
+    # Don't check on Fridays as it wouldn't be very nice to have a bot mark your PR as Stale on Friday and then close it on Monday morning!
     - cron: "0 6 * * MON-THU"
 
 permissions:
@@ -20,11 +22,13 @@ jobs:
           # never automatically mark issues as stale
           days-before-issue-stale: -1
 
+          # Wait 30 days before marking a PR as stale
           days-before-stale: 30
           stale-pr-message: >
             This PR is stale because it has been open 30 days with no activity.
             Unless a comment is added or the “stale” label removed, this will be closed in 3 days
 
+          # Wait 3 days after a PR has been marked as stale before closing
           days-before-close: 3
           close-pr-message: This PR was closed because it has been stalled for 3 days with no activity.
 
