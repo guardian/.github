@@ -28,4 +28,5 @@ jobs:
           days-before-close: 3
           close-pr-message: This PR was closed because it has been stalled for 3 days with no activity.
 
+          # Ignore PR's raised by Dependabot
           exempt-pr-labels: "dependencies"
