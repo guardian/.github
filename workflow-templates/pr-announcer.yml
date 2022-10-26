@@ -15,6 +15,7 @@ jobs:
           # https://user-images.githubusercontent.com/21217225/191922153-ae6fcebe-ca87-4611-93ee-0e66a47dab5d.png
           # Anybody can create a new Webhook for a google chatroom, press the caret by the Space name and press "Manage Webhooks"
           # You can use any value for the name and avatar URL. You should add this secret to your repository settings.
+          # If you want threads to work correctly you'll need to append `&threadKey={threadKey}` to your GOOGLE_WEBHOOK_URL
           google-webhook-url: ${{ secrets.GOOGLE_WEBHOOK_URL }}
 
           # Defaults to the repository that this action is configured in.
