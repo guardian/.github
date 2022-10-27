@@ -1,0 +1,30 @@
+name: "Google Chats PR Announcer"
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every morning at 6AM, Mondays to Fridays
+    - cron: "0 6 * * MON-FRI"
+
+jobs:
+  prnouncer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: guardian/actions-prnouncer@main
+        with:
+          # https://user-images.githubusercontent.com/21217225/191922153-ae6fcebe-ca87-4611-93ee-0e66a47dab5d.png
+          # Anybody can create a new Webhook for a google chatroom, press the caret by the Space name and press "Manage Webhooks"
+          # You can use any value for the name and avatar URL. You should add this secret to your repository settings.
+          # If you want threads to work correctly you'll need to append `&threadKey={threadKey}` to your GOOGLE_WEBHOOK_URL
+          google-webhook-url: ${{ secrets.GOOGLE_WEBHOOK_URL }}
+
+          # Defaults to the repository that this action is configured in.
+          # You can specify multiple repositories by using a comma delimited string!
+          # github-repositories: dotcom-rendering,frontend
+
+          # Comma delimited list of user ID's to ignore when scanning for pull requests. Defaults to Dependabot
+          # github-ignored-users: 49699333
+
+          # Comma delimited list of labels to ignore when scanning for pull requests. Defaults to "Stale".
+          # I recommend setting up the Stale PR workflow if you want to use this action.
+          # github-ignored-labels: stale

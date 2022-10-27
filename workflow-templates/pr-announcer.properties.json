@@ -1,0 +1,5 @@
+{
+  "name": "Guardian Google Chat PR Announcer",
+  "description": "A GitHub Action workflow to send a daily update of pull requests requiring reviews to a Google Chat space",
+  "iconName": "guardian"
+}
