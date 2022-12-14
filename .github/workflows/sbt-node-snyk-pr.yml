@@ -22,6 +22,11 @@ on:
       DEBUG:
         type: string
         required: false
+      STRICT_OUT_OF_SYNC:
+        type: boolean
+        required: false
+        default: true
+        description: flag for snyk to ignore any differences between package.json and package-lock.json that can't be resolved by just re-installing packages.
       SEVERITY_THRESHOLD:
         type: string
         required: false
@@ -127,7 +132,8 @@ jobs:
                   --severity-threshold=${SEVERITY_THRESHOLD:-high} \
                   --all-projects \
                   --org="${{ inputs.ORG }}" \
-                  --exclude="${{ inputs.EXCLUDE }}"
+                  --exclude="${{ inputs.EXCLUDE }}" \
+                  --strict-out-of-sync={{ inputs.STRICT_OUT_OF_SYNC }}
               env:
                   SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
