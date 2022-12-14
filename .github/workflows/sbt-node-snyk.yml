@@ -22,6 +22,11 @@ on:
       DEBUG:
         type: string
         required: false
+      STRICT_OUT_OF_SYNC:
+        type: boolean
+        required: false
+        default: true
+        description: flag for snyk to ignore any differences between package.json and package-lock.json that can't be resolved by just re-installing packages.
       EXCLUDE:
         type: string
         required: false
@@ -137,6 +142,7 @@ jobs:
                   --all-projects \
                   --org="${{ inputs.ORG }}" \
                   --exclude="${{ inputs.EXCLUDE }}" \
+                  --strict-out-of-sync={{ inputs.STRICT_OUT_OF_SYNC }} \
                   --project-tags=commit=${GITHUB_SHA} --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
