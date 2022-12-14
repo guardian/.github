@@ -141,7 +141,7 @@ jobs:
                   ${PRUNE_OPTION} \
                   --all-projects \
                   --org="${{ inputs.ORG }}" \
-                  --strict-out-of-sync="{{ inputs.STRICT_OUT_OF_SYNC }}" \
+                  --strict-out-of-sync=${{ inputs.STRICT_OUT_OF_SYNC }} \
                   --exclude="${{ inputs.EXCLUDE }}" \
                   --project-tags=commit=${GITHUB_SHA} --
               env:
