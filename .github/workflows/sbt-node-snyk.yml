@@ -131,6 +131,7 @@ jobs:
 
             - name: Snyk monitor
               run: |
+                snyk auth ${SNYK_TOKEN}
                 snyk monitor \
                   ${DEBUG_OPTION} \
                   ${PRUNE_OPTION} \
