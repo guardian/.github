@@ -135,6 +135,7 @@ jobs:
                   ${DEBUG_OPTION} \
                   ${PRUNE_OPTION} \
                   --all-projects \
+                  $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
                   --org="${{ inputs.ORG }}" \
                   --exclude="${{ inputs.EXCLUDE }}" \
                   --project-tags=commit=${GITHUB_SHA} --
@@ -142,3 +143,4 @@ jobs:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
+                  PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
