@@ -63,6 +63,10 @@ on:
         type: string
         required: false
         default: go.mod
+      PROJECT_TAGS:
+        type: string
+        required: false
+        description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
     secrets:
       SNYK_TOKEN:
         required: true
@@ -131,6 +135,12 @@ jobs:
 
             - name: Snyk monitor
               run: |
+                projectTags="commit=${GITHUB_SHA}"
+                if [ -n "${PROJECT_TAGS}" ]
+                then
+                  projectTags="$projectTags,${PROJECT_TAGS}"
+                fi
+
                 snyk monitor \
                   ${DEBUG_OPTION} \
                   ${PRUNE_OPTION} \
@@ -138,7 +148,7 @@ jobs:
                   $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
                   --org="${{ inputs.ORG }}" \
                   --exclude="${{ inputs.EXCLUDE }}" \
-                  --project-tags=commit=${GITHUB_SHA} --
+                  --project-tags=${projectTags} --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
