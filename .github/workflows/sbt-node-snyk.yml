@@ -154,3 +154,4 @@ jobs:
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
                   PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
+                  PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
