@@ -99,7 +99,7 @@ jobs:
                   cd -
                 done
 
-            - uses: actions/setup-java@v2
+            - uses: actions/setup-java@v3
               if: inputs.SKIP_SBT != true
               with:
                   java-version: ${{ inputs.JAVA_VERSION }}
