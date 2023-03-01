@@ -67,6 +67,11 @@ on:
         type: string
         required: false
         description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
+      IGNORE_OUT_OF_SYNC:
+        type: boolean
+        required: false
+        default: false
+        description: Set this to true to ignore out of sync errors (for npm and yarn projects)
     secrets:
       SNYK_TOKEN:
         required: true
@@ -145,6 +150,7 @@ jobs:
                 snyk monitor \
                   ${DEBUG_OPTION} \
                   ${PRUNE_OPTION} \
+                  ${OUT_OF_SYNC_OPTION} \
                   --all-projects \
                   $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
                   --org="${{ inputs.ORG }}" \
@@ -156,3 +162,4 @@ jobs:
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
                   PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
                   PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
+                  OUT_OF_SYNC_OPTION: ${{ inputs.IGNORE_OUT_OF_SYNC == 'true' && --strict-out-of-sync=false || '' }}
