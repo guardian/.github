@@ -162,4 +162,4 @@ jobs:
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
                   PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
                   PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
-                  OUT_OF_SYNC_OPTION: ${{ inputs.IGNORE_OUT_OF_SYNC == 'true' && '--strict-out-of-sync=false' || '' }}
+                  OUT_OF_SYNC_OPTION: ${{ inputs.IGNORE_OUT_OF_SYNC == true && '--strict-out-of-sync=false' || '' }}
