@@ -1,3 +1,5 @@
+<!-- See https://github.com/guardian/recommendations/blob/main/pull-requests.md for recommendations on raising and reviewing pull requests. -->
+
 ## What does this change?
 
 <!-- A PR should have enough detail to be understandable far in the future. e.g what is the problem/why is the change needed, how does it solve it and any questions or points of discussion. Prefer copying information from a Trello card over linking to it; the card may not always exist and reviewers may not have access to the board. -->
