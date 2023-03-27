@@ -110,8 +110,9 @@ jobs:
               run: |
                   for file in ${{ inputs.PIPFILES }}   
                   do
-                    PIPENV_PIPFILE=$file
+                    cd $(echo $file | sed "s/Pipfile//")
                     pipenv install
+                    cd -
                   done 
 
             - uses: actions/setup-go@v3
