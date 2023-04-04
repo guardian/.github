@@ -131,9 +131,9 @@ jobs:
                   $DEBUG_OPTION \
                   $PRUNE_OPTION \
                   --severity-threshold=${SEVERITY_THRESHOLD:-high} \
-                  --all-projects \
+                  $TARGET_PROJECT \
                   --org="${{ inputs.ORG }}" \
-                  --exclude="${{ inputs.EXCLUDE }}"
+                  $EXCLUDE"
               env:
                   SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
