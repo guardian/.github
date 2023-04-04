@@ -32,6 +32,11 @@ on:
         type: string
         required: false
         default: ""
+      FILE:
+        type: string
+        required: false
+        default: ""
+        description: specifies the file that Snyk should inspect for package information
       JAVA_VERSION:
         type: string
         required: false
