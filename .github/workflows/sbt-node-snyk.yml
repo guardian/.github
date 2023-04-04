@@ -159,5 +159,7 @@ jobs:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
+                  PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
+                  PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || '--file=$(inputs.PROJECT_FILE)' }}
-                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && '--exclude=$(inputs.EXCLUDE)' || '' }}
+                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && '--exclude=${inputs.EXCLUDE)' || '' }}
