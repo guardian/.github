@@ -26,6 +26,11 @@ on:
         type: string
         required: false
         default: ""
+      PROJECT_FILE:
+        type: string
+        required: false
+        default: ""
+        description: specifies the file that Snyk should inspect for package information
       ORG:
         type: string
         required: true
@@ -145,14 +150,14 @@ jobs:
                 snyk monitor \
                   ${DEBUG_OPTION} \
                   ${PRUNE_OPTION} \
-                  --all-projects \
+                  ${TARGET_PROJECT} \
                   $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
                   --org="${{ inputs.ORG }}" \
-                  --exclude="${{ inputs.EXCLUDE }}" \
+                  ${EXCLUDE} \
                   --project-tags=${projectTags} --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
-                  PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
-                  PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
+                  TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || '--file=${{ inputs.PROJECT_FILE }}' }}
+                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && '--exclude=${{ inputs.EXCLUDE }}' || '' }}
