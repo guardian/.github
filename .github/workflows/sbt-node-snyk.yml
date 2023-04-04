@@ -146,8 +146,6 @@ jobs:
                 then
                   projectTags="$projectTags,${PROJECT_TAGS}"
                 fi
-                echo "$TARGET_PROJECT"
-                echo "$EXCLUDE"
 
                 snyk monitor \
                   ${DEBUG_OPTION} \
