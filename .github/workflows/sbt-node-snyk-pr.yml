@@ -139,3 +139,4 @@ jobs:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
+                  TARGET_PROJECT: ${{ inputs.FILE == '' && '--all-projects' || '--file=${{ inputs.FILE }}' }}
