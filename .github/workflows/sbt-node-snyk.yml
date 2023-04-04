@@ -146,6 +146,8 @@ jobs:
                 then
                   projectTags="$projectTags,${PROJECT_TAGS}"
                 fi
+                echo "$TARGET_PROJECT"
+                echo "$EXCLUDE"
 
                 snyk monitor \
                   ${DEBUG_OPTION} \
@@ -161,5 +163,5 @@ jobs:
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
                   PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
                   PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
-                  TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && "--all-projects" || "--file=${{ inputs.PROJECT_FILE }}" }}
-                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && "--exclude=${{ inputs.EXCLUDE }}" || '' }}
+                  TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || '--file=${{ inputs.PROJECT_FILE }}' }}
+                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && '--exclude=${{ inputs.EXCLUDE }}' || '' }}
