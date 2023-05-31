@@ -141,7 +141,7 @@ jobs:
 
             - name: Snyk monitor
               run: |
-                projectTags="commit=${GITHUB_SHA}"
+                projectTags="commit=${GITHUB_SHA},repo=${{ github.repository }}"
                 if [ -n "${PROJECT_TAGS}" ]
                 then
                   projectTags="$projectTags,${PROJECT_TAGS}"
