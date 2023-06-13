@@ -30,6 +30,9 @@ on:
 
 jobs:
   update-dependency-update-branch:
+    permissions:
+      id-token: write
+      contents: write
     name: Keep tracking branch up to date with main
     uses: guardian/.github/.github/workflows/pr-batching_tracking-branch.yml@v1
 ```
