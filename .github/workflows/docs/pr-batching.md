@@ -52,7 +52,7 @@ jobs:
     name: Set automerge on opened PRs targeting the tracking branch
     permissions:
       contents: write
-      pull-requests: write # only for private repositories
+      pull-requests: write
     uses: guardian/.github/.github/workflows/pr-batching_set-automerge.yml@v1.0.2
 ```
 6. Finally, create a workflow in your repository that uses the `pr-tracking-branch-to-default` workflow to periodically create a batch-update PR targeting your default branch:
