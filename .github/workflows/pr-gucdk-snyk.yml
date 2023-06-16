@@ -1,4 +1,4 @@
-name: Snyk Infrastructure as code test for projects using GuCDK
+name: Snyk Infrastructure as code test for projects using GuCDK. Intended as a blocking PR check
 
 on:
   workflow_call:
