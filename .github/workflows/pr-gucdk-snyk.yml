@@ -3,6 +3,11 @@ name: Snyk Infrastructure as code test for projects using GuCDK
 on:
   workflow_call:
     inputs:
+      PACKAGE_MANAGER:
+        type: string
+        description: 'The package manager used in the project. Valid values are: npm, yarn'
+        required: false
+        default: 'npm'
       CDK_ROOT:
         type: string
         description: 'The root directory of the CDK project'
@@ -34,15 +39,14 @@ jobs:
               with:
                   node-version-file: ${{ inputs.NODE_VERSION_FILE }}
 
-
             - name: Snyk Infrastructure as Code test
               run: |
                 set -e
                 cd ${{ inputs.CDK_ROOT }}
-                npm ci
-                npm run synth -- --quiet
+                echo $SYNTH | bash
                 snyk iac test cdk.out/*.template.json \
                 --severity-threshold=${{inputs.SEVERITY_THRESHOLD}} \
 
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                  SYNTH: ${{ inputs.PACKAGE_MANAGER == 'npm' && 'npm ci && npm run synth -- --quiet' || 'yarn install --frozen-lockfile && yarn synth' }}
