@@ -1,0 +1,63 @@
+name: Snyk Infrastructure as code test for projects using GuCDK
+
+on:
+  workflow_call:
+    inputs:
+      CDK_ROOT:
+        type: string
+        description: 'The root directory of the CDK project'
+        required: false
+        default: 'cdk/'
+      ORG:
+        type: string
+        required: false
+        default: 'guardian-cdk-projects'
+      NODE_VERSION_FILE:
+        type: string
+        required: false
+        default: ".nvmrc"
+      PROJECT_TAGS:
+        type: string
+        required: false
+        description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
+      SEVERITY_THRESHOLD:
+        type: string
+        required: false
+        description: 'Severity threshold for failing the build. Valid values are: low, medium, high, critical'
+        default: 'high'
+    secrets:
+      SNYK_TOKEN:
+        required: true
+
+jobs:
+    security:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout branch
+              uses: actions/checkout@v3
+
+            - uses: snyk/actions/setup@0.3.0
+
+            - uses: actions/setup-node@v2
+              with:
+                  node-version-file: ${{ inputs.NODE_VERSION_FILE }}
+
+
+            - name: Snyk monitor
+              run: |
+                set -e
+                echo "---- entering ${{ inputs.CDK_ROOT }} ----"
+                cd ${{ inputs.CDK_ROOT }}
+                echo "---- installing dependencies ----"
+                ./script/ci
+                echo "---- running snyk test ----"
+                snyk iac test cdk.out/*.json -d \
+                --org=${{ inputs.ORG }} \
+                --report \
+                --project-tags="commit=${GITHUB_SHA},repo=${{ github.repository }}" \
+                --severity-threshold=${{inputs.SEVERITY_THRESHOLD}} \
+                --remote-repo-url=${{github.repositoryUrl}} \
+                --org=${{ inputs.ORG }}
+
+              env:
+                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
