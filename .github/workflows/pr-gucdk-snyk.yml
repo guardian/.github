@@ -8,18 +8,10 @@ on:
         description: 'The root directory of the CDK project'
         required: false
         default: 'cdk/'
-      ORG:
-        type: string
-        required: false
-        default: 'guardian-cdk-projects'
       NODE_VERSION_FILE:
         type: string
         required: false
         default: ".nvmrc"
-      PROJECT_TAGS:
-        type: string
-        required: false
-        description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
       SEVERITY_THRESHOLD:
         type: string
         required: false
@@ -51,7 +43,6 @@ jobs:
                 npm run synth -- --quiet
                 snyk iac test cdk.out/*.template.json \
                 --severity-threshold=${{inputs.SEVERITY_THRESHOLD}} \
-                --org=${{ inputs.ORG }}
 
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
