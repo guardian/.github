@@ -52,11 +52,7 @@ jobs:
                 ./script/ci
                 echo "---- running snyk test ----"
                 snyk iac test cdk.out/*.json -d \
-                --org=${{ inputs.ORG }} \
-                --report \
-                --project-tags="commit=${GITHUB_SHA},repo=${{ github.repository }}" \
                 --severity-threshold=${{inputs.SEVERITY_THRESHOLD}} \
-                --remote-repo-url=${{github.repositoryUrl}} \
                 --org=${{ inputs.ORG }}
 
               env:
