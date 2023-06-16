@@ -43,15 +43,13 @@ jobs:
                   node-version-file: ${{ inputs.NODE_VERSION_FILE }}
 
 
-            - name: Snyk monitor
+            - name: Snyk Infrastructure as Code test
               run: |
                 set -e
-                echo "---- entering ${{ inputs.CDK_ROOT }} ----"
                 cd ${{ inputs.CDK_ROOT }}
-                echo "---- installing dependencies ----"
-                ./script/ci
-                echo "---- running snyk test ----"
-                snyk iac test cdk.out/*.json -d \
+                npm ci
+                npm run synth -- --quiet
+                snyk iac test cdk.out/*.template.json \
                 --severity-threshold=${{inputs.SEVERITY_THRESHOLD}} \
                 --org=${{ inputs.ORG }}
 
