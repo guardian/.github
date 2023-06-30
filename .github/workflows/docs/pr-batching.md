@@ -67,6 +67,9 @@ jobs:
   pr-tracking-branch:
     name: Open a PR from dependency-updates targeting main
     uses: guardian/.github/.github/workflows/pr-batching_pr-tracking-branch-to-default.yml@v1.0.2
+    permissions:
+      contents: write
+      pull-requests: write
 ```
 
 ### Improvements
