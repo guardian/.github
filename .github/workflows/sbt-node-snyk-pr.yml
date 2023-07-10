@@ -123,6 +123,7 @@ jobs:
             - name: Snyk test
               run: |
                 snyk test \
+                  --dev \
                   $DEBUG_OPTION \
                   $PRUNE_OPTION \
                   --severity-threshold=${SEVERITY_THRESHOLD:-high} \

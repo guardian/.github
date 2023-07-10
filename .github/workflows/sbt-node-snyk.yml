@@ -148,6 +148,7 @@ jobs:
                 fi
 
                 snyk monitor \
+                  --dev \
                   ${DEBUG_OPTION} \
                   ${PRUNE_OPTION} \
                   ${TARGET_PROJECT} \
