@@ -15,6 +15,9 @@ on:
 
 jobs:
   update-dependency-update-branch:
+    permissions:
+      id-token: write
+      contents: write
     name: Keep tracking branch up to date with main
     uses: guardian/.github/.github/workflows/pr-batching_tracking-branch.yml@v1.0.1
 EOF
@@ -32,6 +35,7 @@ jobs:
     name: Set automerge on opened PRs targeting the tracking branch
     permissions:
       contents: write
+      pull-requests: write
     uses: guardian/.github/.github/workflows/pr-batching_set-automerge.yml@v1.0.1
 EOF
 
@@ -48,6 +52,9 @@ jobs:
   pr-tracking-branch:
     name: Open a PR from dependency-updates targeting main
     uses: guardian/.github/.github/workflows/pr-batching_pr-tracking-branch-to-default.yml@v1.0.1
+    permissions:
+      contents: write
+      pull-requests: write
 EOF
 
 git add .github/workflows/dep-updates_*.yml
