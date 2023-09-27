@@ -3,6 +3,62 @@ name: Simple Snyk monitor for SBT + Node + Python
 on:
   workflow_call:
     inputs:
+    #required inputs
+      ORG:
+        type: string
+        required: true
+    #optional inputs
+      DEBUG:
+        type: string
+        required: false
+        description: Deprecated. snyk cli will attempt to use debug mode. NB this will not work with Python or Go
+      EXCLUDE:
+        type: string
+        required: false
+        default: ""
+      GO_VERSION_FILE:
+        type: string
+        required: false
+        default: go.mod
+      JAVA_VERSION:
+        type: string
+        required: false
+        default: "11"
+      NODE_PACKAGE_JSON_FILES_MISSING_LOCK:
+        type: string
+        required: false
+        description: space separated list of package.json files that are missing lock files; require installation
+      NODE_VERSION_FILE:
+        type: string
+        required: false
+        default: ".nvmrc"
+      NODE_VERSION_OVERRIDE:
+        type: string
+        required: false
+      PIP_REQUIREMENTS_FILES:
+        type: string
+        required: false
+        description: space-separated list of requirements.txt file paths to install
+      PIPFILES:
+        type: string
+        required: false
+        description: space-separated list of Pipfile file paths to install
+      PROJECT_FILE:
+        type: string
+        required: false
+        default: ""
+        description: specifies the file that Snyk should inspect for package information
+      PROJECT_TAGS:
+        type: string
+        required: false
+        description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
+      PRUNE_DUPLICATES:
+        type: boolean
+        required: false
+        default: false
+      PYTHON_VERSION:
+        type: string
+        required: false
       SKIP_NODE:
         type: boolean
         required: false
@@ -19,59 +75,6 @@ on:
         type: boolean
         required: false
         default: true
-      DEBUG:
-        type: string
-        required: false
-      EXCLUDE:
-        type: string
-        required: false
-        default: ""
-      PROJECT_FILE:
-        type: string
-        required: false
-        default: ""
-        description: specifies the file that Snyk should inspect for package information
-      ORG:
-        type: string
-        required: true
-      JAVA_VERSION:
-        type: string
-        required: false
-        default: "11"
-      NODE_VERSION_FILE:
-        type: string
-        required: false
-        default: ".nvmrc"
-      NODE_VERSION_OVERRIDE:
-        type: string
-        required: false
-      NODE_PACKAGE_JSON_FILES_MISSING_LOCK:
-        type: string
-        required: false
-        description: space separated list of package.json files that are missing lock files; require installation
-      PRUNE_DUPLICATES:
-        type: boolean
-        required: false
-        default: false
-      PYTHON_VERSION:
-        type: string
-        required: false
-      PIP_REQUIREMENTS_FILES:
-        type: string
-        required: false
-        description: space-separated list of requirements.txt file paths to install
-      PIPFILES:
-        type: string
-        required: false
-        description: space-separated list of Pipfile file paths to install
-      GO_VERSION_FILE:
-        type: string
-        required: false
-        default: go.mod
-      PROJECT_TAGS:
-        type: string
-        required: false
-        description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
     secrets:
       SNYK_TOKEN:
         required: true
@@ -156,10 +159,11 @@ jobs:
                   ${EXCLUDE} \
                   --project-tags=${projectTags} --
               env:
-                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
+                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
+                  PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
                   PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
                   PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
-                  PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
+                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
-                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
+
