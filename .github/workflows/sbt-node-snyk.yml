@@ -22,6 +22,7 @@ on:
       DEBUG:
         type: string
         required: false
+        description: Setting this flag to true will break scala and python projects. Deprecated.
       EXCLUDE:
         type: string
         required: false
@@ -141,7 +142,7 @@ jobs:
 
             - name: Snyk monitor
               run: |
-                projectTags="commit=${GITHUB_SHA},repo=${{ github.repository }}"
+                projectTags="commit=${GITHUB_SHA},repo=${{ github.repository }},branch=${GITHUB_REF#refs/heads/}"
                 if [ -n "${PROJECT_TAGS}" ]
                 then
                   projectTags="$projectTags,${PROJECT_TAGS}"
