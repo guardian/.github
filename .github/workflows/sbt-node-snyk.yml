@@ -32,11 +32,6 @@ on:
         required: false
         default: ""
         description: specifies the file that Snyk should inspect for package information
-      PROJECT_NAME:
-        type: string
-        required: false
-        default: ""
-        description: specifies the project name override to use in snyk, if required
       ORG:
         type: string
         required: true
@@ -170,4 +165,4 @@ jobs:
                   PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
                   EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
-                  PROJECT_NAME_OPTION: ${{ inputs.PROJECT_NAME == '' && format('--project-name={0}', inputs.PROJECT_NAME) }}
+                  PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && format('--project-name={0}/{1}', ${{ github.repository }}, inputs.PROJECT_FILE) }}
