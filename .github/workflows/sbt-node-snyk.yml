@@ -165,4 +165,4 @@ jobs:
                   PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
                   EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
-                  PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && format('--project-name={0}/{1}', ${{ github.repository }}, inputs.PROJECT_FILE) }}
+                  PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && format('--project-name={0}/{1}', github.repository, inputs.PROJECT_FILE) }}
