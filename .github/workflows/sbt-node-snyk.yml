@@ -154,7 +154,7 @@ jobs:
                   ${TARGET_PROJECT} \
                   $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
                   --org="${{ inputs.ORG }}" \
-                  ${PROJECT_NAME_OPTION}
+                  ${PROJECT_NAME_OPTION} \
                   ${EXCLUDE} \
                   --project-tags=${projectTags} --
               env:
