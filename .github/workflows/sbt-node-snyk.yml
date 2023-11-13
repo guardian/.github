@@ -154,6 +154,7 @@ jobs:
                   ${TARGET_PROJECT} \
                   $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
                   --org="${{ inputs.ORG }}" \
+                  ${PROJECT_NAME_OPTION} \
                   ${EXCLUDE} \
                   --project-tags=${projectTags} --
               env:
@@ -164,3 +165,4 @@ jobs:
                   PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
                   EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
+                  PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && '' || format('--project-name={0}', inputs.PROJECT_FILE) }}
