@@ -73,6 +73,11 @@ on:
         type: string
         required: false
         description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
+      UPLOAD_CODE_SCANNING:
+        type: boolean
+        required: false
+        default: false
+        description: upload results from sny to Github Code Scanning
     secrets:
       SNYK_TOKEN:
         required: true
@@ -156,7 +161,8 @@ jobs:
                   --org="${{ inputs.ORG }}" \
                   ${PROJECT_NAME_OPTION} \
                   ${EXCLUDE} \
-                  --project-tags=${projectTags} --
+                  --project-tags=${projectTags} \
+                  --sarif-file-output=snyk.sarif --
               env:
                   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                   DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
@@ -166,3 +172,8 @@ jobs:
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
                   EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
                   PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && '' || format('--project-name={0}', inputs.PROJECT_FILE) }}
+          - name: Upload Code scanning results
+            if: inputs.UPLOAD_CODE_SCANNING == true
+            uses: github/codeql-action/upload-sarif@v2
+            with:
+              sarif_file: snyk.sarif
