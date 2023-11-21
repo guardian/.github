@@ -172,8 +172,8 @@ jobs:
                   TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
                   EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
                   PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && '' || format('--project-name={0}', inputs.PROJECT_FILE) }}
-          - name: Upload Code scanning results
-            if: inputs.UPLOAD_CODE_SCANNING == true
-            uses: github/codeql-action/upload-sarif@v2
-            with:
-              sarif_file: snyk.sarif
+            - name: Upload Code scanning results
+              if: inputs.UPLOAD_CODE_SCANNING == true
+              uses: github/codeql-action/upload-sarif@v2
+              with:
+                sarif_file: snyk.sarif
