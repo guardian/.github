@@ -5,3 +5,9 @@ updates:
     directory: "workflow-templates/"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "github-actions"
+    # Automatically picks up `/.github/workflows` as specified in the docs:
+    # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#directory
+    directory: "/"
+    schedule:
+      interval: "weekly"
