@@ -115,7 +115,7 @@ jobs:
                     cd -
                   done 
 
-            - uses: actions/setup-go@v3
+            - uses: actions/setup-go@v4
               if: inputs.SKIP_GO != true
               with:
                   go-version-file: ${{ inputs.GO_VERSION_FILE }}
