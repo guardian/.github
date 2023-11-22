@@ -75,12 +75,12 @@ jobs:
 
             - uses: snyk/actions/setup@0.3.0
 
-            - uses: actions/setup-node@v2
+            - uses: actions/setup-node@v4
               if: inputs.NODE_VERSION_OVERRIDE == '' && inputs.SKIP_NODE != true
               with:
                   node-version-file: ${{ inputs.NODE_VERSION_FILE }}
 
-            - uses: actions/setup-node@v2
+            - uses: actions/setup-node@v4
               if: inputs.NODE_VERSION_OVERRIDE != '' && inputs.SKIP_NODE != true
               with:
                   node-version: ${{ inputs.NODE_VERSION_OVERRIDE }}
