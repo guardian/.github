@@ -8,7 +8,7 @@ jobs:
         runs-on: ubuntu-latest
         name: Set automerge on PRs opened on tracking branch
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Set automerge
               env:
                   GITHUB_TOKEN: ${{ github.token }}
