@@ -1,0 +1,61 @@
+name: Simple Snyk monitoring tool for Containers
+
+on:
+  workflow_call:
+    inputs:
+      CONTAINER_NAME:
+        type: string
+        required: true
+      ORG:
+        type: string
+        required: true
+      DEBUG:
+        type: boolean
+        required: false
+      FILE:
+        type: string
+        required: false
+        default: "Dockerfile"
+      IMAGE_TAG:
+        type: string
+        required: false
+        default: "latest"
+      PROJECT_NAME:
+        type: string
+        required: false
+      PROJECT_TAGS:
+        type: string
+        required: false
+        description: comma-separated list of key/value pairs for project tags, e.g. "team=devex,fun=true"
+    secrets:
+      SNYK_TOKEN:
+        required: true
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - uses: snyk/actions/setup@0.4.0
+
+      - name: Snyk monitor
+        run: |
+          projectTags="commit=${GITHUB_SHA},repo=${{ github.repository }},branch=${GITHUB_REF#refs/heads/}"
+          if [ -n "${PROJECT_TAGS}" ]
+          then
+            projectTags="$projectTags,${PROJECT_TAGS}"
+          fi
+
+          snyk container test ${{ inputs.CONTAINER_NAME }}:${{ inputs.IMAGE_TAG}}\
+          --file=Dockerfile \
+          ${DEBUG_OPTION} \
+          ${PROJECT_NAME} \
+          --org=${{ inputs.ORG }} \
+          --project-tags=${projectTags} --
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          DEBUG_OPTION: ${{ inputs.DEBUG == true && '-d' || '' }}
+          PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
+          PROJECT_NAME: ${{inputs.PROJECT_NAME == '' && '' || format('--project-name={0}', inputs.PROJECT_NAME)}}
