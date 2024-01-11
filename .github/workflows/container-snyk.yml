@@ -54,7 +54,7 @@ jobs:
             projectTags="$projectTags,${PROJECT_TAGS}"
           fi
 
-          snyk container test ${{ inputs.CONTAINER_NAME }}:${{ inputs.IMAGE_TAG}}\
+          snyk container test ${{ inputs.CONTAINER_NAME }}:${{ inputs.IMAGE_TAG}} \
           --file=${{ inputs.FILE }} \
           ${DEBUG_OPTION} \
           ${PROJECT_NAME} \
