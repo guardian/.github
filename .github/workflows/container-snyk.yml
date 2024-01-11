@@ -49,7 +49,7 @@ jobs:
           fi
 
           snyk container test ${{ inputs.CONTAINER_NAME }}:${{ inputs.IMAGE_TAG}}\
-          --file=Dockerfile \
+          --file=${{ inputs.FILE }} \
           ${DEBUG_OPTION} \
           ${PROJECT_NAME} \
           --org=${{ inputs.ORG }} \
