@@ -23,6 +23,12 @@ on:
       PROJECT_NAME:
         type: string
         required: false
+      USERNAME:
+        type: string
+        required: true
+      PASSWORD:
+        type: string
+        required: true
       PROJECT_TAGS:
         type: string
         required: false
@@ -52,6 +58,8 @@ jobs:
           --file=${{ inputs.FILE }} \
           ${DEBUG_OPTION} \
           ${PROJECT_NAME} \
+          --username=${{ inputs.USERNAME }}
+          --password=${{ inputs.PASSWORD }}
           --org=${{ inputs.ORG }} \
           --project-tags=${projectTags} --
         env:
