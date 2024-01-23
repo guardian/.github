@@ -143,10 +143,7 @@ jobs:
               if: inputs.SKIP_GO != true
               with:
                   go-version-file: ${{ inputs.GO_VERSION_FILE }}
-
-            - uses: swift-actions/setup-swift@v1
-              if: inputs.SKIP_SWIFT != true
-
+        
             - name: Snyk monitor
               run: |
                 projectTags="commit=${GITHUB_SHA},repo=${{ github.repository }},branch=${GITHUB_REF#refs/heads/}"
