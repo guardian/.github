@@ -88,7 +88,12 @@ jobs:
             - name: Checkout branch
               uses: actions/checkout@v4
 
+            
             - uses: snyk/actions/setup@0.4.0
+
+            - name: Snyk CLI version
+              run: |
+                snyk version
 
             - uses: actions/setup-node@v4
               if: inputs.NODE_VERSION_OVERRIDE == '' && inputs.SKIP_NODE != true
