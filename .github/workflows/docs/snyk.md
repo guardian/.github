@@ -121,7 +121,7 @@ jobs:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 ```
 
-More options can be found in [the inputs of the action](sbt-node-snyk.yml#L5).
+More options can be found in [the inputs of the action](../sbt-node-snyk.yml#L5).
 
 # [`snyk test`](https://docs.snyk.io/snyk-cli/commands/test)
 
