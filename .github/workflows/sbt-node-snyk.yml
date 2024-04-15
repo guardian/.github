@@ -38,7 +38,7 @@ on:
       JAVA_VERSION:
         type: string
         required: false
-        default: "11"
+        default: "21"
       NODE_VERSION_FILE:
         type: string
         required: false
