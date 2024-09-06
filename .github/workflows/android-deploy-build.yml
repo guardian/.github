@@ -8,6 +8,25 @@ on:
         required: false
         default: true #change me when ready
         description: When enabled, workflow will not execute the fastlane command to deploy a build, but print it instead
+      type:
+        description: Type (Track to deploy to)
+        required: true
+        default: internal
+        type: string
+      rollout:
+        description: Percentage rollout [0 - 1]
+        required: true
+        default: '1.00'
+        type: string
+      gitref:
+        description: Branch or tag to deploy
+        required: false
+        default: main
+        type: string
+      sha:
+        description: Commit hash to deploy (optional)
+        required: false
+        type: string
     secrets:
       GOOGLE_CLOUD_API_CREDENTIALS:
         required: false
