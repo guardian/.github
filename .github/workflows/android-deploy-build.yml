@@ -1,0 +1,23 @@
+name: Deploy build to Google play
+
+on:
+  workflow_call:
+    inputs:
+      DRY_RUN:
+        type: boolean
+        required: false
+        default: true #change me when ready
+        description: When enabled, workflow will not execute the fastlane command to deploy a build, but print it instead
+    secrets:
+      GOOGLE_CLOUD_API_CREDENTIALS:
+        required: false
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout branch
+              uses: actions/checkout@v4
+
+            - run: |
+                ls
