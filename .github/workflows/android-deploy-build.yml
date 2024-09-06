@@ -9,7 +9,7 @@ on:
         default: true #remove at end of testingthis should not be here
         description: When enabled, workflow will not execute the fastlane command to deploy a build, but print it instead
       artifact_name:
-        description: Name of the build artifacts (set when calling actions/upload-artifact@v4 in the build automation)
+        description: Name of the build artifacts (set when calling actions/upload-artifact in the build automation)
         required: true
         type: string
       type:
