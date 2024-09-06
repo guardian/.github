@@ -6,7 +6,7 @@ on:
       dry_run:
         type: boolean
         required: false
-        default: true #change me when ready
+        default: true #remove at end of testingthis should not be here
         description: When enabled, workflow will not execute the fastlane command to deploy a build, but print it instead
       type:
         description: Type (Track to deploy to)
@@ -21,7 +21,7 @@ on:
       gitref:
         description: Branch or tag to deploy
         required: false
-        default: main
+        default: main  #remove at end of testing!
         type: string
       sha:
         description: Commit hash to deploy (optional)
@@ -51,6 +51,16 @@ jobs:
           test -f .git/refs/heads/${{ env.GITREF }} || git fetch --no-tags origin ${{ env.GITREF }}:${{ env.GITREF }}
           SHA=$(git rev-parse ${{ env.GITREF }})
           echo "SHA=$SHA" >> $GITHUB_ENV
+
+      - name: Download apk ${{ env.ARTIFACT_NAME }} from target build ${{ env.SHA }}
+        # Note: we use the commit hash to specify the version since this is not an official and trusted action
+        uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11 #@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: build.yaml
+          workflow_conclusion: success
+          commit: ${{ env.SHA }}
+          name: ${{ env.ARTIFACT_NAME }}
 
       - name: Publish summary
         run: |
