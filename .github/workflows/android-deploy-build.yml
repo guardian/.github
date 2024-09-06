@@ -16,8 +16,8 @@ on:
         description: Name of the build artifacts (set when calling actions/upload-artifact in the build automation)
         required: true
         type: string
-      type:
-        description: Type (Track to deploy to)
+      track:
+        description: Play store track to deploy to (e.g. production, internal)
         required: true
         default: internal
         type: string
@@ -46,9 +46,9 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v4
 
-      - name: "job: ${{ inputs.type }} release from ${{ inputs.gitref }}${{ inputs.sha }} to ${{ inputs.rollout }} of users"
+      - name: "job: ${{ inputs.track }} release from ${{ inputs.gitref }}${{ inputs.sha }} to ${{ inputs.rollout }} of users"
         run: |
-          echo "TYPE=${{ inputs.type }}" >> $GITHUB_ENV
+          echo "TRACK=${{ inputs.track }}" >> $GITHUB_ENV
           echo "PACKAGE_NAME=${{ inputs.package_name }}" >> $GITHUB_ENV
           echo "ARTIFACT_NAME=${{ inputs.artifact_name }}" >> $GITHUB_ENV
           echo "ROLLOUT=${{ inputs.rollout }}" >> $GITHUB_ENV
@@ -72,22 +72,22 @@ jobs:
           commit: ${{ env.SHA }}
           name: ${{ env.ARTIFACT_NAME }}
 
-      - name: Release ${{ env.ARTIFACT_NAME }} build to ${{ env.ROLLOUT }} of ${{ env.TYPE }} track from ${{ env.GITREF }}@${{ env.SHA }}
+      - name: Publish summary
+        run: |
+          echo "## Deployment for Track: ${{ env.TRACK}}" >> $GITHUB_STEP_SUMMARY
+          echo "**Rollout**: ${{ env.ROLLOUT }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch/tag**: [${{ env.GITREF }}](https://github.com/${{ github.repository }}/tree/${{ env.GITREF }})" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit hash**: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})" >> $GITHUB_STEP_SUMMARY
+          echo "**aab**: $(ls *.aab)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Release ${{ env.ARTIFACT_NAME }} build to ${{ env.ROLLOUT }} of ${{ env.TRACK}} track from ${{ env.GITREF }}@${{ env.SHA }}
         run: |
           echo fastlane supply \
             --package_name ${{ env.PACKAGE_NAME }} \
-            --track ${{ env.TYPE }} \
+            --track ${{ env.TRACK}} \
             --aab_path *.aab \
             --skip_upload_apk \
             --rollout ${{ env.ROLLOUT }}
         env:
           SUPPLY_JSON_KEY_DATA: "" #"${{ secrets.GOOGLE_CLOUD_API_CREDENTIALS }}" #remove when testing done
           SUPPLY_UPLOAD_MAX_RETRIES: 1
-
-      - name: Publish summary
-        run: |
-          echo "## Deployment for Track: ${{ env.TYPE }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Rollout**: ${{ env.ROLLOUT }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch/tag**: [${{ env.GITREF }}](https://github.com/${{ github.repository }}/tree/${{ env.GITREF }})" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit hash**: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})" >> $GITHUB_STEP_SUMMARY
-          echo "**aab**: $(ls *.aab)" >> $GITHUB_STEP_SUMMARY
