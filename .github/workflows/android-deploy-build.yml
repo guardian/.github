@@ -3,7 +3,7 @@ name: Deploy build to Google play
 on:
   workflow_call:
     inputs:
-      DRY_RUN:
+      dry_run:
         type: boolean
         required: false
         default: true #change me when ready
@@ -32,11 +32,33 @@ on:
         required: false
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout branch
-              uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
 
-            - run: |
-                ls
+      - name: "job: ${{ inputs.type }} release from ${{ inputs.gitref }}${{ inputs.sha }} to ${{ inputs.rollout }} of users"
+        run: |
+          echo "TYPE=${{ inputs.type }}" >> $GITHUB_ENV
+          echo "ROLLOUT=${{ inputs.rollout }}" >> $GITHUB_ENV
+          echo "GITREF=${{ inputs.gitref }}" >> $GITHUB_ENV
+          echo "SHA=${{ inputs.sha }}" >> $GITHUB_ENV
+
+      - name: Determinate target sha if not given to action
+        if: env.SHA == ''
+        run: |
+          test -f .git/refs/heads/${{ env.GITREF }} || git fetch --no-tags origin ${{ env.GITREF }}:${{ env.GITREF }}
+          SHA=$(git rev-parse ${{ env.GITREF }})
+          echo "SHA=$SHA" >> $GITHUB_ENV
+
+      - name: Publish summary
+        run: |
+          echo "## Deployment for Track: ${{ env.TYPE }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Rollout**: ${{ env.ROLLOUT }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch/tag**: [${{ env.GITREF }}](https://github.com/${{ github.repository }}/tree/${{ env.GITREF }})" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit hash**: [${{ env.SHA }}](https://github.com/${{ github.repository }}/commit/${{ env.SHA }})" >> $GITHUB_STEP_SUMMARY
+          echo "**aab**: $(ls *.aab)" >> $GITHUB_STEP_SUMMARY
+
+      - run: |
+          ls
