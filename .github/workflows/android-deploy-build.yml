@@ -60,7 +60,7 @@ jobs:
           workflow: build.yaml
           workflow_conclusion: success
           commit: ${{ env.SHA }}
-          name: ${{ env.ARTIFACT_NAME }}
+          name: code-artifacts
 
       - name: Publish summary
         run: |
