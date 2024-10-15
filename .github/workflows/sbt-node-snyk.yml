@@ -110,6 +110,9 @@ jobs:
               with:
                   java-version: ${{ inputs.JAVA_VERSION }}
                   distribution: "adopt"
+            
+            - uses: sbt/setup-sbt@8a071aa780c993c7a204c785d04d3e8eb64ef272 # v1.1.0
+              if: inputs.SKIP_SBT != true
 
             - uses: actions/setup-python@v5
               if: inputs.SKIP_PYTHON != true
