@@ -19,6 +19,8 @@ jobs:
         id: stale
         # Read about options here: https://github.com/actions/stale#all-options
         with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
           # never automatically mark issues as stale
           days-before-issue-stale: -1
 
