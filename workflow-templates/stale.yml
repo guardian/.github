@@ -19,6 +19,8 @@ jobs:
         id: stale
         # Read about options here: https://github.com/actions/stale#all-options
         with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
           # never automatically mark issues as stale
           days-before-issue-stale: -1
 
@@ -26,7 +28,7 @@ jobs:
           days-before-stale: 30
           stale-pr-message: >
             This PR is stale because it has been open 30 days with no activity.
-            Unless a comment is added or the “stale” label removed, this will be closed in 3 days
+            Unless a comment is added or the “stale” label removed, this will be closed in 3 days.
 
           # Wait 3 days after a PR has been marked as stale before closing
           days-before-close: 3
