@@ -1,4 +1,4 @@
-name: Simple Snyk monitor for SBT + Node + Python
+name: Simple Snyk monitor for SBT + Node + Python (deprecated)
 
 on:
   workflow_call:
@@ -78,94 +78,10 @@ on:
         required: true
 
 jobs:
-    security:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout branch
-              uses: actions/checkout@v4
-
-            - uses: snyk/actions/setup@0.4.0
-
-            - uses: actions/setup-node@v4
-              if: inputs.NODE_VERSION_OVERRIDE == '' && inputs.SKIP_NODE != true
-              with:
-                  node-version-file: ${{ inputs.NODE_VERSION_FILE }}
-
-            - uses: actions/setup-node@v4
-              if: inputs.NODE_VERSION_OVERRIDE != '' && inputs.SKIP_NODE != true
-              with:
-                  node-version: ${{ inputs.NODE_VERSION_OVERRIDE }}
-
-            - if: inputs.NODE_PACKAGE_JSON_FILES_MISSING_LOCK != ''
-              run: |
-                for file in ${{ inputs.NODE_PACKAGE_JSON_FILES_MISSING_LOCK }}   
-                do
-                  cd $(echo $file | sed "s/package\.json//")
-                  npm install
-                  cd -
-                done
-
-            - uses: actions/setup-java@v4
-              if: inputs.SKIP_SBT != true
-              with:
-                  java-version: ${{ inputs.JAVA_VERSION }}
-                  distribution: "adopt"
-            
-            - uses: sbt/setup-sbt@96cf3f09dc501acdad7807fffe97dba9fa0709be # v1.1.5
-              if: inputs.SKIP_SBT != true
-
-            - uses: actions/setup-python@v5
-              if: inputs.SKIP_PYTHON != true
-              with:
-                python-version: ${{ inputs.PYTHON_VERSION }}
-
-            - if: inputs.SKIP_PYTHON != true
-              run: pip install pipenv
-
-            - if: inputs.PIP_REQUIREMENTS_FILES != ''
-              run: |
-               for file in ${{ inputs.PIP_REQUIREMENTS_FILES }}   
-               do
-                 pip install -r $file
-               done
-
-            - if: inputs.PIPFILES != ''
-              run: |
-                for file in ${{ inputs.PIPFILES }}   
-                do
-                  cd $(echo $file | sed "s/Pipfile//")
-                  pipenv install
-                  cd -
-                done
-
-            - uses: actions/setup-go@v5
-              if: inputs.SKIP_GO != true
-              with:
-                  go-version-file: ${{ inputs.GO_VERSION_FILE }}
-
-            - name: Snyk monitor
-              run: |
-                projectTags="commit=${GITHUB_SHA},repo=${{ github.repository }},branch=${GITHUB_REF#refs/heads/}"
-                if [ -n "${PROJECT_TAGS}" ]
-                then
-                  projectTags="$projectTags,${PROJECT_TAGS}"
-                fi
-
-                snyk monitor \
-                  ${DEBUG_OPTION} \
-                  ${PRUNE_OPTION} \
-                  ${TARGET_PROJECT} \
-                  $([[ ${PYTHON_VERSION:0:2} == 3. ]] && echo "--command=python3") \
-                  --org="${{ inputs.ORG }}" \
-                  ${PROJECT_NAME_OPTION} \
-                  ${EXCLUDE} \
-                  --project-tags=${projectTags} --
-              env:
-                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-                  DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
-                  PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
-                  PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
-                  PROJECT_TAGS: ${{inputs.PROJECT_TAGS}}
-                  TARGET_PROJECT: ${{ inputs.PROJECT_FILE == '' && '--all-projects' || format('--file={0}', inputs.PROJECT_FILE) }}
-                  EXCLUDE: ${{ inputs.PROJECT_FILE == '' && format('--exclude={0}', inputs.EXCLUDE) || '' }}
-                  PROJECT_NAME_OPTION: ${{ inputs.PROJECT_FILE == '' && '' || format('--project-name={0}', inputs.PROJECT_FILE) }}
+    security: 
+      runs-on: ubuntu-latest
+      steps:
+        - name: 'Deprecation'
+          run: |
+            echo "This sbt-node-snyk workflow is deprecated. Please delete this workflow" 
+            exit 1

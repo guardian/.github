@@ -1,4 +1,4 @@
-name: Simple Snyk test for SBT + Node
+name: Simple Snyk test for SBT + Node (deprecated)
 
 on:
   workflow_call:
@@ -67,70 +67,10 @@ on:
         required: true
 
 jobs:
-    security:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout branch
-              uses: actions/checkout@v4
-
-            - uses: snyk/actions/setup@0.4.0
-
-            - uses: actions/setup-node@v4
-              if: inputs.NODE_VERSION_OVERRIDE == '' && inputs.SKIP_NODE != true
-              with:
-                  node-version-file: ${{ inputs.NODE_VERSION_FILE }}
-
-            - uses: actions/setup-node@v4
-              if: inputs.NODE_VERSION_OVERRIDE != '' && inputs.SKIP_NODE != true
-              with:
-                  node-version: ${{ inputs.NODE_VERSION_OVERRIDE }}
-
-            - uses: actions/setup-java@v4
-              if: inputs.SKIP_SBT != true
-              with:
-                  java-version: ${{ inputs.JAVA_VERSION }}
-                  distribution: "adopt"
-
-            - uses: actions/setup-python@v5
-              if: inputs.SKIP_PYTHON != true
-              with:
-                  python-version: ${{ inputs.PYTHON_VERSION }}
-
-            - if: inputs.SKIP_PYTHON != true
-              run: pip install pipenv
-
-            - if: inputs.PIP_REQUIREMENTS_FILES != ''
-              run: |
-                  for file in ${{ inputs.PIP_REQUIREMENTS_FILES }}   
-                  do
-                    pip install -r $file
-                  done
-
-            - if: inputs.PIPFILES != ''
-              run: |
-                  for file in ${{ inputs.PIPFILES }}   
-                  do
-                    cd $(echo $file | sed "s/Pipfile//")
-                    pipenv install
-                    cd -
-                  done 
-
-            - uses: actions/setup-go@v5
-              if: inputs.SKIP_GO != true
-              with:
-                  go-version-file: ${{ inputs.GO_VERSION_FILE }}
-
-            - name: Snyk test
-              run: |
-                snyk test \
-                  $DEBUG_OPTION \
-                  $PRUNE_OPTION \
-                  --severity-threshold=${SEVERITY_THRESHOLD:-high} \
-                  --all-projects \
-                  --org="${{ inputs.ORG }}" \
-                  --exclude="${{ inputs.EXCLUDE }}"
-              env:
-                  SEVERITY_THRESHOLD: ${{ inputs.SEVERITY_THRESHOLD }}
-                  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-                  DEBUG_OPTION: ${{ inputs.DEBUG == 'true' && '-d' || '' }}
-                  PRUNE_OPTION: ${{ inputs.PRUNE_DUPLICATES == true && '-p' || '' }}
+    security: 
+      runs-on: ubuntu-latest
+      steps:
+        - name: 'Deprecation'
+          run: |
+            echo "The sbt-node-snyk-pr workflow is deprecated. Please delete this workflow." 
+            exit 1
