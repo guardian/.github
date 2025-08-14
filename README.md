@@ -1,6 +1,6 @@
 # Default health files
 
-Default community health files for The Guardian's Digital Department.
+Default community health files for the Guardian's Product and Engineering department.
 
 For more info: 
 
