@@ -1,8 +1,7 @@
 name: Require PR Label
 
 on:
-  pull_request:
-    types: [opened, labeled, unlabeled, synchronize, reopened, edited]
+  workflow_call:
 
 jobs:
   require-label:
