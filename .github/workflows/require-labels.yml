@@ -1,8 +1,12 @@
 name: Require PR Label
 
 on:
-  workflow_call:
+  pull_request:
 
+permissions:
+  pull-requests: read
+  issues: read
+  
 jobs:
   require-label:
     runs-on: ubuntu-latest
@@ -12,8 +16,17 @@ jobs:
         with:
           script: |
             const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure'];
-            const labels = context.payload.pull_request.labels.map(l => l.name.toLowerCase());
-            const hasRequired = requiredLabels.some(label => labels.includes(label));
+            const prNumber = context.payload.pull_request.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+              owner: owner,
+              repo: repo,
+              issue_number: prNumber
+            });
+            const labelNames = labels.map(l => l.name.toLowerCase());
+            const hasRequired = requiredLabels.some(label => labelNames.includes(label));
             if (!hasRequired) {
-              core.setFailed('Pull request must have at least one of the following labels: fix, feature, maintenance');
+              core.setFailed("Pull request must have at least one of the following labels: 'fix', 'feature', 'maintenance', 'not sure'. Please add an appropriate label and re-run this workflow (use the 'Re-run jobs' button)");
             }
