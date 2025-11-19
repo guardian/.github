@@ -19,9 +19,11 @@ jobs:
     steps:
       - name: Check for required labels
         uses: actions/github-script@@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
         with:
           script: |
-            const labels = context.payload.pull_request.labels.map(label => label.name);
+            const labels = JSON.parse(process.env.LABELS);
             const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure'];
             const hasRequired = labels.some(label => requiredLabels.includes(label));
             
