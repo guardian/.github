@@ -1,0 +1,29 @@
+name: Require PR Labels
+
+on:
+  pull_request:
+    # include more than the default triggers, so we also catch label updates
+    types:
+      - labeled
+      - unlabeled
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  check-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for required labels
+        uses: actions/github-script@@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(label => label.name);
+            const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure'];
+            const hasRequired = labels.some(label => requiredLabels.includes(label));
+            
+            if (!hasRequired) {
+              core.setFailed(`Pull Requests must include a Core4 label: ${requiredLabels.join(', ')}`);
+            } else {
+              core.info(`PR is labelled for Core4: ${labels.filter(l => requiredLabels.includes(l)).join(', ')}`);
+            }
