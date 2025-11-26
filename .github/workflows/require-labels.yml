@@ -3,6 +3,8 @@ name: Require PR Label
 on:
   workflow_call:
   workflow_dispatch:
+
+permissions: {}
   
 jobs:
   require-label:
