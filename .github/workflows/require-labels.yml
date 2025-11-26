@@ -20,7 +20,7 @@ jobs:
             const labels = JSON.parse(process.env.LABELS);
             const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure'];
             const labelNames = labels.map(label => label.toLowerCase());
-            const hasRequired = labels.some(label => requiredLabels.includes(label));
+            const hasRequired = labelNames.some(label => requiredLabels.includes(label));
             if (!hasRequired) {
               core.setFailed(`Pull requests must include a Core4 label: ${requiredLabels.join(', ')}.`);
             }
