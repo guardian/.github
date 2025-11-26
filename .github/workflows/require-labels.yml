@@ -1,11 +1,8 @@
 name: Require PR Label
 
 on:
-  pull_request:
-
-permissions:
-  pull-requests: read
-  issues: read
+  workflow_call:
+  workflow_dispatch:
   
 jobs:
   require-label:
@@ -13,20 +10,14 @@ jobs:
     steps:
       - name: Check for required label
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+            LABELS: ${{ toJSON(github.event.pull_request.labels.*.name)}}
         with:
           script: |
+            const labels = JSON.parse(process.env.LABELS);
             const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure'];
-            const prNumber = context.payload.pull_request.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
-              owner: owner,
-              repo: repo,
-              issue_number: prNumber
-            });
-            const labelNames = labels.map(l => l.name.toLowerCase());
-            const hasRequired = requiredLabels.some(label => labelNames.includes(label));
+            const labelNames = labels.map(label => label.toLowerCase());
+            const hasRequired = labels.some(label => requiredLabels.includes(label));
             if (!hasRequired) {
-              core.setFailed("Pull request must have at least one of the following labels: 'fix', 'feature', 'maintenance', 'not sure'. Please add an appropriate label and re-run this workflow (use the 'Re-run jobs' button)");
+              core.setFailed(`Pull requests must include a Core4 label: ${requiredLabels.join(', ')}.`);
             }
