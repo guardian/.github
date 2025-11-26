@@ -1,0 +1,24 @@
+name: Shai Hulud commit hunter
+
+on:
+  workflow_call:
+    inputs:
+      COMMIT_MESSAGE:
+        type: string
+        required: true
+
+# Search for references to hulud (any capitalization) in the commit message, store true or false for next job
+jobs:
+  hunt_hulud:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for hulud reference
+        run: |
+          if echo "${{ inputs.COMMIT_MESSAGE }}" | grep -iq "hulud"; then
+            echo "HULUD_FOUND=true" >> $GITHUB_OUTPUT
+            echo "Hulud reference found in commit message."
+          else
+            echo "HULUD_FOUND=false" >> $GITHUB_OUTPUT
+            echo "No hulud reference found in commit message."
+          fi
+ 
