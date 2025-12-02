@@ -17,7 +17,7 @@ jobs:
         with:
           script: |
             const labels = JSON.parse(process.env.LABELS);
-            const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure'];
+            const requiredLabels = ['fix', 'feature', 'maintenance', 'not sure', 'dependencies'];
             const labelNames = labels.map(label => label.toLowerCase());
             const hasRequired = labelNames.some(label => requiredLabels.includes(label));
             if (!hasRequired) {
