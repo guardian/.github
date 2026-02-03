@@ -4,9 +4,9 @@
 
 <!-- A PR should have enough detail to be understandable far in the future. e.g what is the problem/why is the change needed, how does it solve it and any questions or points of discussion. Prefer copying information from a Trello card over linking to it; the card may not always exist and reviewers may not have access to the board. -->
 
-## How to test
+## How has this change been tested?
 
-<!-- Provide instructions to help others verify the change. This could take the form of "On PROD, do X and witness Y. On this branch, do X and witness Z. " -->
+<!-- For example, have you deployed your branch to `CODE` and tested certain functionality or is unit testing sufficent for this change? If you'd like help testing your changes as part of the PR review process then mention that explicitly here. -->
 
 ## How can we measure success?
 
