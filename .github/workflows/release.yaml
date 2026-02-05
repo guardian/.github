@@ -34,6 +34,13 @@ jobs:
           VERSION=${LATEST_TAG#v}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
+          # Validate tag format - fail if malformed
+          if ! [[ "$MAJOR" =~ ^[0-9]+$ ]] || ! [[ "$MINOR" =~ ^[0-9]+$ ]] || ! [[ "$PATCH" =~ ^[0-9]+$ ]]; then
+            echo "Error: Latest tag '$LATEST_TAG' is not in valid semver format (v#.#.#)"
+            echo "Expected format: v1.2.3 (where each component is a number)"
+            exit 1
+          fi
+
           # Check commit messages for hints to version (major, minor, patch)
           COMMITS=$(git log "$LATEST_TAG"..HEAD --pretty=format:"%s")
 
@@ -41,7 +48,7 @@ jobs:
             MAJOR=$((MAJOR + 1))
             MINOR=0
             PATCH=0
-          elif echo "$COMMITS" | grep -qiE "^(feat|feature)|^Bump:" then
+          elif echo "$COMMITS" | grep -qiE "^(feat|feature)|^Bump:"; then
             MINOR=$((MINOR + 1))
             PATCH=0
           else
