@@ -44,7 +44,7 @@ jobs:
           # Check commit messages for hints to version (major, minor, patch)
           COMMITS=$(git log "$LATEST_TAG"..HEAD --pretty=format:"%s")
 
-          if echo "$COMMITS" | grep -qiE "(\!:|breaking|major)"; then
+          if echo "$COMMITS" | grep -qiE "^(breaking|major|.+!):"; then
             MAJOR=$((MAJOR + 1))
             MINOR=0
             PATCH=0
