@@ -1,0 +1,50 @@
+name: Require PR Label
+
+on:
+  workflow_call:
+
+permissions: 
+  contents: read
+  
+jobs:
+  require-consistent-tool-versions:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for consistent versions
+        run: |
+          FAIL=0
+          
+          check() {
+            local tool=$1; shift
+            versions="$(printf '%s\n' "$@" | sort -u | xargs)"
+            versionCount="$(echo "$versions" | wc -w)"
+            echo "$tool: $versions"
+            (( $versionCount < 2 )) && return 0
+            FAIL=1
+          }
+          
+          tv() { awk -v t="$1" '$1==t{print $2}' .tool-versions 2>/dev/null; }
+          
+          # Could add .node-version, package.json and more ...
+          check node \
+            "$(sed 's/^v//' .nvmrc 2>/dev/null | tr -d '[:space:]')" \
+            "$(tv nodejs)" \
+            "$(tv node)" 
+          
+          # Could add .sdkmanrc, jenv, and move
+          check java \
+            "$(cat .java-version 2>/dev/null | tr -d '[:space:]')" \
+            "$(tv java)" 
+          
+          check scala \
+            "$(sed 's|//.*||' build.sbt 2>/dev/null | grep scalaVersion | cut -d'"' -f2 | tr -d '[:space:]')" \
+            "$(tv scala)" 
+          
+          check sbt \
+            "$(awk -F= '/^sbt\.version=/ {print $2}' project/build.properties 2>/dev/null)" \
+            "$(tv sbt)" 
+          
+          exit $FAIL
+
