@@ -3,9 +3,9 @@ name: Require PR Label
 on:
   workflow_call:
 
-permissions: 
+permissions:
   contents: read
-  
+
 jobs:
   require-consistent-tool-versions:
     runs-on: ubuntu-slim
@@ -14,37 +14,53 @@ jobs:
 
       - name: Check for consistent versions
         run: |
-          FAIL=0
-          
+          local FAIL=0
+
+          versions_match() {
+            printf '%s\n' "$@" | sort -V | awk -F. '
+              NR>1 {
+                for(i=1;i<=n;i++)
+                  if ($i!=a[n]) exit 1
+              }
+              {
+                 n=NF;
+                 split($0, a, ".")
+              }
+            '
+          }
+
           check() {
             local tool=$1; shift
-            versions="$(printf '%s\n' "$@" | sort -u | xargs)"
-            versionCount="$(echo "$versions" | wc -w)"
-            echo "$tool: $versions"
-            (( $versionCount < 2 )) && return 0
+            echo "$tool has versions: $@"
+            if versions_match "$@"; then
+              echo "$tool versions are consistent"
+              FAIL=0
+              return
+            fi
+            echo "$tool versions are inconsistent"
             FAIL=1
           }
-          
+
           tv() { awk -v t="$1" '$1==t{print $2}' .tool-versions 2>/dev/null; }
-          
+
           # Could add .node-version, package.json and more ...
           check node \
             "$(sed 's/^v//' .nvmrc 2>/dev/null | tr -d '[:space:]')" \
             "$(tv nodejs)" \
-            "$(tv node)" 
-          
+            "$(tv node)"
+
           # Could add .sdkmanrc, jenv, and move
           check java \
             "$(cat .java-version 2>/dev/null | tr -d '[:space:]')" \
-            "$(tv java)" 
-          
+            "$(tv java)"
+
           check scala \
             "$(sed 's|//.*||' build.sbt 2>/dev/null | grep scalaVersion | cut -d'"' -f2 | tr -d '[:space:]')" \
-            "$(tv scala)" 
-          
+            "$(tv scala)"
+
           check sbt \
             "$(awk -F= '/^sbt\.version=/ {print $2}' project/build.properties 2>/dev/null)" \
-            "$(tv sbt)" 
-          
+            "$(tv sbt)"
+
           exit $FAIL
 
