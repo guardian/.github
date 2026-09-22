@@ -3,9 +3,9 @@ name: Require PR Label
 on:
   workflow_call:
 
-permissions: 
+permissions:
   contents: read
-  
+
 jobs:
   require-label:
     runs-on: ubuntu-slim
@@ -13,11 +13,11 @@ jobs:
       - name: Check for required label
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-            LABELS: ${{ toJSON(github.event.pull_request.labels.*.name)}}
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name)}}
         with:
           script: |
             const labels = JSON.parse(process.env.LABELS);
-            const requiredLabels = ['hotfix', 'feature', 'maintenance'];
+            const requiredLabels = ['hotfix', 'feature', 'maintenance', 'dependencies'];
             const labelNames = labels.map(label => label.toLowerCase());
             const hasRequired = labelNames.some(label => requiredLabels.includes(label));
             if (!hasRequired) {
